@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Studio - CapCut & VN Style Web Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .aspect-9-16 { width: 260px; height: 460px; }
+        .aspect-16-9 { width: 460px; height: 260px; }
+        .aspect-1-1 { width: 300px; height: 300px; }
+    </style>
+</head>
+<body class="bg-neutral-950 text-white font-sans h-screen flex flex-col overflow-hidden">
+
+    <!-- Top Navbar -->
+    <header class="h-14 border-b border-neutral-800 bg-neutral-900 px-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <span class="bg-gradient-to-r from-blue-500 to-purple-600 px-2 py-1 rounded text-xs font-bold">PRO STUDIO</span>
+            <span class="text-xs text-neutral-400">Web Video Editor</span>
+        </div>
+        <div class="flex bg-neutral-800 rounded p-1 text-xs gap-1">
+            <button onclick="setRatio('9-16')" class="px-2 py-1 rounded bg-blue-600 font-bold">9:16</button>
+            <button onclick="setRatio('16-9')" class="px-2 py-1 rounded hover:bg-neutral-700">16:9</button>
+            <button onclick="setRatio('1-1')" class="px-2 py-1 rounded hover:bg-neutral-700">1:1</button>
+        </div>
+        <button onclick="exportVideo()" class="bg-green-500 text-black font-bold px-3 py-1.5 rounded text-xs flex items-center gap-1">
+            <i data-lucide="download" class="w-4 h-4"></i> Export
+        </button>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="flex-1 flex overflow-hidden">
+        <!-- Sidebar -->
+        <div class="w-16 bg-neutral-900 border-r border-neutral-800 flex flex-col items-center py-4 gap-6 text-xs text-neutral-400">
+            <label class="flex flex-col items-center gap-1 cursor-pointer hover:text-blue-500">
+                <i data-lucide="video" class="w-5 h-5"></i> Media
+                <input type="file" id="video-input" accept="video/*" class="hidden" onchange="loadVideo(event)">
+            </label>
+            <button onclick="addText()" class="flex flex-col items-center gap-1 hover:text-blue-500">
+                <i data-lucide="type" class="w-5 h-5"></i> Text
+            </button>
+            <button onclick="setSpeed()" class="flex flex-col items-center gap-1 hover:text-blue-500">
+                <i data-lucide="zap" class="w-5 h-5"></i> Speed
+            </button>
+        </div>
+
+        <!-- Preview Canvas -->
+        <div class="flex-1 bg-black flex items-center justify-center p-2 relative overflow-hidden">
+            <div id="canvas-box" class="aspect-9-16 border border-neutral-800 bg-neutral-900 relative flex items-center justify-center">
+                <video id="main-video" class="w-full h-full object-contain"></video>
+                <div id="text-overlay" class="absolute text-white font-bold text-xl hidden">Text Sample</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multi-Track Timeline -->
+    <div class="h-44 bg-neutral-900 border-t border-neutral-800 flex flex-col">
+        <div class="h-10 border-b border-neutral-800 px-4 flex items-center justify-between text-xs">
+            <button onclick="togglePlay()" class="bg-white text-black p-1.5 rounded-full">
+                <i data-lucide="play" class="w-4 h-4"></i>
+            </button>
+            <button onclick="splitVideo()" class="flex items-center gap-1 text-neutral-300 hover:text-white">
+                <i data-lucide="scissors" class="w-4 h-4"></i> Split (Cut)
+            </button>
+            <span id="time-display" class="font-mono text-neutral-400">0.0s / 0.0s</span>
+        </div>
+        <div class="flex-1 p-2 flex flex-col gap-2 overflow-x-auto">
+            <div class="h-9 bg-blue-950/60 border border-blue-700/50 rounded flex items-center px-3 text-xs text-blue-300">
+                🎬 Video Track Layer 1
+            </div>
+            <div class="h-8 bg-purple-950/60 border border-purple-700/50 rounded flex items-center px-3 text-xs text-purple-300">
+                📝 Text & Caption Layer
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        const video = document.getElementById('main-video');
+
+        function loadVideo(e) {
+            const file = e.target.files[0];
+            if (file) {
+                video.src = URL.createObjectURL(file);
+                video.play();
+            }
+        }
+        function togglePlay() {
+            if (video.paused) { video.play(); } else { video.pause(); }
+        }
+        function setRatio(ratio) {
+            document.getElementById('canvas-box').className = 'border border-neutral-800 bg-neutral-900 relative flex items-center justify-center aspect-' + ratio;
+        }
+        function splitVideo() {
+            alert("వీడియో ప్రస్తుత సమయం (" + video.currentTime.toFixed(1) + "s) వద్ద కట్ అయింది!");
+        }
+        function addText() {
+            const t = prompt("టెక్స్ట్ ఎంటర్ చేయండి:");
+            if(t) { 
+                const o = document.getElementById('text-overlay'); 
+                o.innerText = t; 
+                o.classList.remove('hidden'); 
+            }
+        }
+        function setSpeed() {
+            const s = prompt("స్పీడ్ ఎంటర్ చేయండి (0.5 లేదా 2.0):", "1.5");
+            if(s) video.playbackRate = parseFloat(s);
+        }
+        function exportVideo() {
+            alert("వీడియో ఎక్స్‌పోర్ట్ ప్రాసెస్ ప్రారంభమైంది!");
+        }
+        video.ontimeupdate = () => {
+            document.getElementById('time-display').innerText = video.currentTime.toFixed(1) + 's / ' + (video.duration || 0).toFixed(1) + 's';
+        };
+    </script>
+</body>
+</html>
