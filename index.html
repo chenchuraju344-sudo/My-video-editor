@@ -58,7 +58,7 @@
         </div>
     </header>
 
-    <!-- 2. MAIN WORKSPACE (Mobile Optimized) -->
+    <!-- 2. MAIN WORKSPACE -->
     <div class="flex-1 flex flex-col lg:flex-row relative overflow-hidden">
         
         <!-- CENTER 3D VIEWPORT -->
@@ -68,7 +68,7 @@
             <!-- Floating Status -->
             <div class="absolute top-3 left-3 glass-panel px-3 py-1 rounded-full text-[10px] font-mono text-emerald-400 flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                <span id="ai-status-text">Gemini AI Engine Connected (60 FPS)</span>
+                <span id="ai-status-text">Spatial AI Engine Active (60 FPS)</span>
             </div>
         </div>
 
@@ -103,9 +103,9 @@
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">3D AI Presets</span>
                 <div class="grid grid-cols-3 gap-2">
-                    <button onclick="loadPreset('cube')" class="bg-slate-900 border border-slate-800 hover:border-slate-600 py-2 rounded-lg text-[11px] text-slate-300 font-medium transition text-center">Duplex</button>
-                    <button onclick="loadPreset('sphere')" class="bg-slate-900 border border-slate-800 hover:border-slate-600 py-2 rounded-lg text-[11px] text-slate-300 font-medium transition text-center">Drone</button>
-                    <button onclick="loadPreset('torus')" class="bg-slate-900 border border-slate-800 hover:border-slate-600 py-2 rounded-lg text-[11px] text-slate-300 font-medium transition text-center">Core</button>
+                    <button onclick="loadPreset('duplex')" class="bg-slate-900 border border-slate-800 hover:border-slate-600 py-2 rounded-lg text-[11px] text-slate-300 font-medium transition text-center">Duplex</button>
+                    <button onclick="loadPreset('drone')" class="bg-slate-900 border border-slate-800 hover:border-slate-600 py-2 rounded-lg text-[11px] text-slate-300 font-medium transition text-center">Drone</button>
+                    <button onclick="loadPreset('core')" class="bg-slate-900 border border-slate-800 hover:border-slate-600 py-2 rounded-lg text-[11px] text-slate-300 font-medium transition text-center">Core</button>
                 </div>
             </div>
         </div>
@@ -117,7 +117,7 @@
             <div class="pl-2 text-blue-400">
                 <i data-lucide="sparkles" class="w-4 h-4 animate-pulse"></i>
             </div>
-            <input type="text" id="prompt-input" placeholder="Type prompt (e.g., 'Modern Duplex House 3D')" class="w-full bg-transparent border-none text-xs text-white placeholder-slate-500 focus:outline-none py-1.5">
+            <input type="text" id="prompt-input" placeholder="Type prompt (e.g., 'Modern house 3d')" class="w-full bg-transparent border-none text-xs text-white placeholder-slate-500 focus:outline-none py-1.5">
             <button onclick="generate3DSimulation()" id="gen-btn" class="glow-btn bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 shrink-0 transition">
                 <span>Generate</span>
                 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
@@ -154,20 +154,9 @@
     <script>
         lucide.createIcons();
 
-        // 1. EMBEDDED API KEY & SYSTEM INSTRUCTIONS
-        const GEMINI_API_KEY = "AQ.Ab8RN6JkhzA2ioDwBKB0Kn8bzbtiJxNVgfwnIoyUlTldw-j2Kg";
-        const SYSTEM_INSTRUCTIONS = `You are the core spatial geometry and simulation intelligence engine of "NEURA-3D". Your primary task is to parse user prompts and convert them strictly into 3D structural parameters for Three.js rendering.
-
-RULES & INSTRUCTIONS:
-1. NO CHATTY RESPONSES: Do not include conversational filler, greetings, explanations, or unrelated text.
-2. OBJECT MAPPING: 
-   - If the user asks for a building, house, duplex, or room, categorize it as architectural box/mesh.
-   - If the user asks for a vehicle, drone, plane, or machine, categorize it as a complex mechanical mesh.
-   - If the user asks for a sphere, planet, cell, or orb, categorize it as a spherical geometry.
-3. OUTPUT FORMAT: Yield spatial dimensions for rendering.`;
-
         let scene, camera, renderer, currentMesh;
         let isOrbiting = true;
+        let currentMaterialType = 'neon';
 
         function init3D() {
             const container = document.getElementById('canvas-container');
@@ -184,23 +173,15 @@ RULES & INSTRUCTIONS:
             renderer.setPixelRatio(window.devicePixelRatio);
             container.appendChild(renderer.domElement);
 
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
             scene.add(ambientLight);
 
-            const sunLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
+            const sunLight = new THREE.DirectionalLight(0x38bdf8, 1.5);
             sunLight.position.set(5, 10, 7);
             sunLight.name = "sunlight";
             scene.add(sunLight);
 
-            // Default 3D Geometry
-            const geometry = new THREE.IcosahedronGeometry(1.4, 1);
-            const material = new THREE.MeshStandardMaterial({ 
-                color: 0x2563eb, 
-                wireframe: true
-            });
-            currentMesh = new THREE.Mesh(geometry, material);
-            scene.add(currentMesh);
-
+            loadPreset('core');
             animate();
         }
 
@@ -229,14 +210,20 @@ RULES & INSTRUCTIONS:
             if (sun) sun.intensity = val / 12;
         }
 
+        function getSelectedMaterial() {
+            if (currentMaterialType === 'metallic') {
+                return new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.1 });
+            } else if (currentMaterialType === 'glass') {
+                return new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, transmission: 0.9, opacity: 0.8, transparent: true, roughness: 0 });
+            } else {
+                return new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true });
+            }
+        }
+
         function changeMaterial(type) {
-            if (!currentMesh) return;
-            if (type === 'metallic') {
-                currentMesh.material = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.1 });
-            } else if (type === 'glass') {
-                currentMesh.material = new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, transmission: 0.9, opacity: 1, transparent: true, roughness: 0 });
-            } else if (type === 'neon') {
-                currentMesh.material = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true });
+            currentMaterialType = type;
+            if (currentMesh) {
+                currentMesh.material = getSelectedMaterial();
             }
         }
 
@@ -247,85 +234,64 @@ RULES & INSTRUCTIONS:
         }
 
         function loadPreset(type) {
-            if(currentMesh) scene.remove(currentMesh);
+            if (currentMesh) scene.remove(currentMesh);
             let geom;
-            if (type === 'cube') geom = new THREE.BoxGeometry(2.2, 1.8, 2.2);
-            else if (type === 'sphere') geom = new THREE.SphereGeometry(1.5, 32, 32);
-            else if (type === 'torus') geom = new THREE.TorusGeometry(1.2, 0.4, 16, 100);
+            if (type === 'duplex') {
+                // Duplex House Geometry
+                geom = new THREE.BoxGeometry(2.2, 1.8, 2.2);
+            } else if (type === 'drone') {
+                // Drone Mechanical Frame
+                geom = new THREE.TorusKnotGeometry(1.1, 0.3, 100, 16);
+            } else {
+                // Core
+                geom = new THREE.IcosahedronGeometry(1.4, 1);
+            }
 
-            const mat = new THREE.MeshStandardMaterial({ color: 0x3b82f6, roughness: 0.3, metalness: 0.7 });
-            currentMesh = new THREE.Mesh(geom, mat);
+            currentMesh = new THREE.Mesh(geom, getSelectedMaterial());
             scene.add(currentMesh);
         }
 
-        // REAL GEMINI AI CALL ENGINE
-        async function generate3DSimulation() {
+        // DYNAMIC 3D GENERATOR BASED ON PROMPT MAP
+        function generate3DSimulation() {
             const prompt = document.getElementById('prompt-input').value.trim();
             if (!prompt) return alert("Please enter a 3D prompt!");
 
-            document.getElementById('ai-status-text').innerText = "Gemini AI Analyzing Spatial Geometry...";
-            document.getElementById('gen-btn').innerText = "AI Processing...";
+            const statusText = document.getElementById('ai-status-text');
+            const genBtn = document.getElementById('gen-btn');
 
-            try {
-                // REST API Call to Gemini API
-                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-                
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        systemInstruction: {
-                            parts: [{ text: SYSTEM_INSTRUCTIONS }]
-                        },
-                        contents: [{
-                            parts: [{ text: prompt }]
-                        }]
-                    })
-                });
-
-                const data = await response.json();
-                console.log("Gemini Response:", data);
-
-            } catch (err) {
-                console.warn("API Processing Fallback to Engine", err);
-            }
-
-            // Real-time Mesh Builder based on instruction mapping
-            if (currentMesh) scene.remove(currentMesh);
-            const lowerPrompt = prompt.toLowerCase();
-            let geom;
-
-            if (lowerPrompt.includes('house') || lowerPrompt.includes('duplex') || lowerPrompt.includes('building') || lowerPrompt.includes('room')) {
-                // Architectural Geometry
-                geom = new THREE.BoxGeometry(2.5, 2.0, 2.2);
-            } else if (lowerPrompt.includes('drone') || lowerPrompt.includes('car') || lowerPrompt.includes('plane') || lowerPrompt.includes('machine')) {
-                // Mechanical Torus-Knot
-                geom = new THREE.TorusKnotGeometry(1.2, 0.3, 100, 16);
-            } else if (lowerPrompt.includes('sphere') || lowerPrompt.includes('planet') || lowerPrompt.includes('cell') || lowerPrompt.includes('orb') || lowerPrompt.includes('ball')) {
-                // Spherical Geometry
-                geom = new THREE.SphereGeometry(1.5, 32, 32);
-            } else {
-                // Dynamic Mesh
-                geom = new THREE.DodecahedronGeometry(1.5);
-            }
-
-            const mat = new THREE.MeshStandardMaterial({ 
-                color: 0x38bdf8, 
-                wireframe: true 
-            });
-            currentMesh = new THREE.Mesh(geom, mat);
-            scene.add(currentMesh);
+            statusText.innerText = "Generating 3D Spatial Mesh...";
+            genBtn.innerText = "Processing...";
 
             setTimeout(() => {
-                document.getElementById('ai-status-text').innerText = "Gemini AI Engine Active (60 FPS)";
-                document.getElementById('gen-btn').innerText = "Generate";
-            }, 600);
+                if (currentMesh) scene.remove(currentMesh);
+
+                const lowerPrompt = prompt.toLowerCase();
+                let geom;
+
+                if (lowerPrompt.includes('house') || lowerPrompt.includes('duplex') || lowerPrompt.includes('building') || lowerPrompt.includes('room') || lowerPrompt.includes('home')) {
+                    // Modern House Architectural Box
+                    geom = new THREE.BoxGeometry(2.4, 2.0, 2.2);
+                } else if (lowerPrompt.includes('drone') || lowerPrompt.includes('car') || lowerPrompt.includes('plane') || lowerPrompt.includes('bike') || lowerPrompt.includes('machine')) {
+                    // Mechanical Vehicle Frame
+                    geom = new THREE.TorusKnotGeometry(1.2, 0.3, 100, 16);
+                } else if (lowerPrompt.includes('sphere') || lowerPrompt.includes('planet') || lowerPrompt.includes('ball') || lowerPrompt.includes('orb') || lowerPrompt.includes('earth')) {
+                    // Spherical Shape
+                    geom = new THREE.SphereGeometry(1.5, 32, 32);
+                } else if (lowerPrompt.includes('cube') || lowerPrompt.includes('box')) {
+                    geom = new THREE.BoxGeometry(2, 2, 2);
+                } else {
+                    geom = new THREE.DodecahedronGeometry(1.5);
+                }
+
+                currentMesh = new THREE.Mesh(geom, getSelectedMaterial());
+                scene.add(currentMesh);
+
+                statusText.innerText = "Spatial AI Engine Active (60 FPS)";
+                genBtn.innerText = "Generate";
+            }, 500);
         }
 
-        function export3DModel() {
-            alert("Exporting 3D Model (.OBJ format)");
-        }
-
+        function export3DModel() { alert("Exporting 3D Model (.OBJ format)"); }
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
