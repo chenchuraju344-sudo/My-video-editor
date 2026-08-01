@@ -1,301 +1,494 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEURA-3D | Generative AI Spatial & Physics Simulator</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Three.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
+    <title>PRICER — Live Price & Deal Scanner</title>
+    <!-- Google Fonts & FontAwesome Logos -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* CSS Variables for Premium Dark Theme */
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 31, 48, 0.7);
+            --accent-color: #6366f1;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --green-accent: #10b981;
+            --border-color: rgba(255, 255, 255, 0.08);
         }
-        .glow-btn {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-            transition: all 0.3s ease;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        .glow-btn:hover {
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
-            transform: translateY(-2px);
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
         }
-        #canvas-container {
+
+        /* --- Header & 3D Logo --- */
+        header {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* 3D Rotating Logo Effect */
+        .logo-3d-wrapper {
+            width: 45px;
+            height: 45px;
+            perspective: 1000px;
+        }
+
+        .logo-3d {
             width: 100%;
             height: 100%;
-            touch-action: none;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate3D 8s infinite linear;
         }
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+
+        .logo-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+            backface-visibility: visible;
+        }
+
+        @keyframes rotate3D {
+            0% { transform: rotateY(0deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(10deg); }
+        }
+
+        .brand-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* --- Main Content Section --- */
+        main {
+            width: 100%;
+            max-width: 900px;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Search Input Box */
+        .search-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 20px;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-card:focus-within {
+            border-color: #6366f1;
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 15px 20px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            background: var(--accent-gradient);
+            border: none;
+            padding: 15px 35px;
+            color: white;
+            font-weight: 600;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* --- Comparison Results Section --- */
+        .results-section {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease-in-out forwards;
+            text-align: left;
+            margin-top: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-preview {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .product-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: #fff;
+            padding: 5px;
+        }
+
+        .product-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .savings-badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--green-accent);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Stores Comparison Grid */
+        .store-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .store-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            padding: 20px 25px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .store-card:hover {
+            transform: translateX(5px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .store-card.best-deal {
+            border: 1px solid var(--green-accent);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .store-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 200px;
+        }
+
+        .store-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .store-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .price-details {
+            text-align: right;
+        }
+
+        .current-price {
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .original-price {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-decoration: line-through;
+        }
+
+        .discount-tag {
+            color: var(--green-accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .buy-btn {
+            background: white;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .buy-btn:hover {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        /* AdSense Box Placeholder */
+        .ad-banner {
+            margin-top: 2rem;
+            width: 100%;
+            height: 90px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col overflow-x-hidden select-none">
+<body>
 
-    <!-- TOP NAVBAR -->
-    <header class="h-16 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md px-4 flex items-center justify-between sticky top-0 z-50">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
-                <i data-lucide="box" class="w-4 h-4 text-white"></i>
+    <!-- Header & 3D Logo -->
+    <header>
+        <div class="brand-container">
+            <div class="logo-3d-wrapper">
+                <div class="logo-3d">
+                    <div class="logo-face"><i class="fa-solid fa-tags"></i></div>
+                </div>
             </div>
             <div>
-                <span class="font-extrabold text-sm tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">NEURA-3D</span>
-                <span class="text-[9px] uppercase tracking-widest text-blue-400 block font-semibold">Spatial AI Engine</span>
+                <div class="brand-name">PRICER</div>
+                <div class="tagline">Universal Deal Scanner</div>
             </div>
-        </div>
-
-        <div class="flex items-center gap-2">
-            <button onclick="openModal('pricing-modal')" class="text-[11px] bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 px-2.5 py-1.5 rounded-lg font-medium transition flex items-center gap-1">
-                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i> Pro
-            </button>
-            <button onclick="export3DModel()" class="glow-btn bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1">
-                <i data-lucide="download" class="w-3.5 h-3.5"></i> Export
-            </button>
         </div>
     </header>
 
-    <!-- MAIN WORKSPACE -->
-    <div class="flex-1 flex flex-col lg:flex-row relative overflow-hidden">
-        
-        <!-- 3D VIEWPORT -->
-        <div class="w-full h-[45vh] lg:h-auto lg:flex-1 relative bg-slate-950 border-b lg:border-b-0 border-slate-800">
-            <div id="canvas-container"></div>
+    <!-- Main Content -->
+    <main>
+        <h1 class="hero-title">ఒక్క క్లిక్‌తో <span>అత్యంత తక్కువ ధర</span> కనుగొనండి</h1>
+        <p class="hero-subtitle">Amazon, Flipkart, Tata CLiQ లింక్ ఇక్కడ పేస్ట్ చేయండి. ఎక్కడ ఆఫర్ ఉందో పక్కాగా చూపిస్తాం!</p>
 
-            <div class="absolute top-3 left-3 glass-panel px-3 py-1 rounded-full text-[10px] font-mono text-emerald-400 flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                <span id="ai-status-text">Spatial AI Engine Active (60 FPS)</span>
-            </div>
+        <!-- Search Input Box -->
+        <div class="search-card">
+            <input type="text" id="productUrl" class="search-input" placeholder="Paste Amazon or Flipkart Product Link here...">
+            <button class="search-btn" onclick="scanPrices()">
+                <i class="fa-solid fa-bolt"></i> Scan Prices
+            </button>
         </div>
 
-        <!-- CONTROL PANEL -->
-        <div class="w-full lg:w-80 bg-slate-950/95 p-4 flex flex-col gap-4 overflow-y-auto max-h-[45vh] lg:max-h-none border-r border-slate-800">
+        <!-- Comparison Results Section -->
+        <div class="results-section" id="results">
             
-            <div>
-                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">Surface Material</span>
-                <div class="grid grid-cols-3 gap-2 text-xs">
-                    <button onclick="changeMaterial('metallic')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 py-2 rounded-lg text-center font-medium hover:border-blue-500 transition text-slate-300">Metallic</button>
-                    <button onclick="changeMaterial('glass')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 py-2 rounded-lg text-center font-medium hover:border-blue-500 transition text-slate-300">Glass</button>
-                    <button onclick="changeMaterial('neon')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 py-2 rounded-lg text-center font-medium hover:border-blue-500 transition text-cyan-400">Neon AI</button>
+            <div class="product-preview">
+                <img src="https://m.media-amazon.com/images/I/61bK6PMOC3L._SL1500_.jpg" alt="Product" class="product-img">
+                <div class="product-info">
+                    <h3 id="productTitle">Apple AirPods Pro (2nd Gen) Wireless Earbuds</h3>
+                    <div class="savings-badge"><i class="fa-solid fa-piggy-bank"></i> Maximum Savings: ₹3,000 (12% OFF)</div>
                 </div>
             </div>
 
-            <div class="glass-panel p-3 rounded-xl space-y-3">
-                <div class="flex justify-between text-xs text-slate-300">
-                    <span>Sunlight Angle</span>
-                    <span id="light-val" class="font-mono text-blue-400">12:00 PM</span>
-                </div>
-                <input type="range" id="light-slider" min="0" max="24" value="12" oninput="updateSunlight(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500">
+            <div class="section-title"><i class="fa-solid fa-store"></i> Live Store Comparison:</div>
 
-                <div class="flex items-center justify-between pt-1">
-                    <span class="text-xs text-slate-300">Auto Orbit</span>
-                    <button onclick="toggleOrbit()" id="orbit-btn" class="bg-blue-600/20 text-blue-400 border border-blue-500/40 px-2.5 py-0.5 rounded-md text-xs font-bold">Active</button>
+            <div class="store-list">
+                <!-- Store 1: Best Deal -->
+                <div class="store-card best-deal">
+                    <div class="store-brand">
+                        <div class="store-icon" style="color: #FF9900;"><i class="fa-brands fa-amazon"></i></div>
+                        <div>
+                            <div class="store-name">Amazon</div>
+                            <small style="color: var(--green-accent);">Best Lowest Price</small>
+                        </div>
+                    </div>
+                    <div class="price-details">
+                        <div class="current-price">₹21,990</div>
+                        <div><span class="original-price">₹24,900</span> <span class="discount-tag">12% OFF</span></div>
+                    </div>
+                    <a href="#" target="_blank" class="buy-btn" onclick="redirectAffiliate(event, 'amazon')">Buy Now <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                </div>
+
+                <!-- Store 2 -->
+                <div class="store-card">
+                    <div class="store-brand">
+                        <div class="store-icon" style="color: #2874F0;"><i class="fa-solid fa-bag-shopping"></i></div>
+                        <div>
+                            <div class="store-name">Flipkart</div>
+                        </div>
+                    </div>
+                    <div class="price-details">
+                        <div class="current-price">₹22,490</div>
+                        <div><span class="original-price">₹24,900</span> <span class="discount-tag">9% OFF</span></div>
+                    </div>
+                    <a href="#" target="_blank" class="buy-btn" onclick="redirectAffiliate(event, 'flipkart')">Buy Now <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                </div>
+
+                <!-- Store 3 -->
+                <div class="store-card">
+                    <div class="store-brand">
+                        <div class="store-icon" style="color: #E21B21;"><i class="fa-solid fa-cart-shopping"></i></div>
+                        <div>
+                            <div class="store-name">Tata CLiQ</div>
+                        </div>
+                    </div>
+                    <div class="price-details">
+                        <div class="current-price">₹23,990</div>
+                        <div><span class="original-price">₹24,900</span> <span class="discount-tag">3% OFF</span></div>
+                    </div>
+                    <a href="#" target="_blank" class="buy-btn" onclick="redirectAffiliate(event, 'tatacliq')">Buy Now <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                 </div>
             </div>
 
-            <div>
-                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">3D AI Presets</span>
-                <div class="grid grid-cols-3 gap-2">
-                    <button onclick="loadPreset('duplex')" class="bg-slate-900 border border-slate-800 hover:border-slate-600 py-2 rounded-lg text-[11px] text-slate-300 font-medium transition text-center">Duplex</button>
-                    <button onclick="loadPreset('drone')" class="bg-slate-900 border border-slate-800 hover:border-slate-600 py-2 rounded-lg text-[11px] text-slate-300 font-medium transition text-center">Drone</button>
-                    <button onclick="loadPreset('core')" class="bg-slate-900 border border-slate-800 hover:border-slate-600 py-2 rounded-lg text-[11px] text-slate-300 font-medium transition text-center">Core</button>
-                </div>
+            <!-- AdSense Responsive Ad Placement -->
+            <div class="ad-banner">
+                [ Google AdSense Banner Area - Auto Responsive ]
             </div>
+
         </div>
-    </div>
+    </main>
 
-    <!-- AI PROMPT BAR -->
-    <div class="p-3 bg-slate-950 border-t border-slate-800/80 sticky bottom-0 z-40">
-        <div class="glass-panel p-1.5 rounded-xl shadow-2xl flex items-center gap-2 border-slate-700/60 max-w-xl mx-auto">
-            <div class="pl-2 text-blue-400">
-                <i data-lucide="sparkles" class="w-4 h-4 animate-pulse"></i>
-            </div>
-            <input type="text" id="prompt-input" placeholder="Type prompt (e.g., 'Modern house', 'Drone')" class="w-full bg-transparent border-none text-xs text-white placeholder-slate-500 focus:outline-none py-1.5">
-            <button onclick="generate3DSimulation()" id="gen-btn" class="glow-btn bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 shrink-0 transition">
-                <span>Generate</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- PRO MODAL -->
-    <div id="pricing-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-sm p-5 rounded-2xl border-slate-700 relative">
-            <button onclick="closeModal('pricing-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            <div class="text-center mb-4">
-                <span class="bg-blue-500/10 text-blue-400 text-[10px] font-extrabold tracking-widest uppercase px-3 py-1 rounded-full border border-blue-500/20">Upgrade</span>
-                <h3 class="text-lg font-black text-white mt-2">Unlock Unlimited 3D</h3>
-            </div>
-            
-            <div class="bg-gradient-to-r from-blue-950/80 to-indigo-950/80 p-4 rounded-xl border border-blue-500/50 flex justify-between items-center mb-4">
-                <div>
-                    <h4 class="text-xs font-bold text-blue-400">Pro Developer</h4>
-                    <p class="text-[10px] text-slate-300">Unlimited 3D + CAD Export</p>
-                </div>
-                <span class="text-base font-black text-white">$29<span class="text-[10px] text-slate-400">/mo</span></span>
-            </div>
-
-            <button onclick="alert('Connecting Payment Gateway...')" class="w-full glow-btn bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-xs transition">
-                Subscribe with Razorpay
-            </button>
-        </div>
-    </div>
-
-    <!-- Three.js Engine Script -->
+    <!-- JavaScript Automation Logic -->
     <script>
-        lucide.createIcons();
+        // Affiliate IDs
+        const AFFILIATE_IDS = {
+            amazon: "pricer00-21",       // నీ Amazon Associate Tag
+            flipkart: "pricer_aff",      // నీ CueLinks/EarnKaro Tag
+            tatacliq: "pricer_tata"
+        };
 
-        let scene, camera, renderer, currentMesh;
-        let isOrbiting = true;
-        let currentMaterialType = 'metallic';
-
-        function init3D() {
-            const container = document.getElementById('canvas-container');
+        // Scan Prices Function (Simulates Backend Scraping Data)
+        function scanPrices() {
+            const urlInput = document.getElementById('productUrl').value;
             
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x020617);
-
-            camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(3, 3, 5);
-            camera.lookAt(0, 0, 0);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            container.appendChild(renderer.domElement);
-
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-            scene.add(ambientLight);
-
-            const sunLight = new THREE.DirectionalLight(0x38bdf8, 1.5);
-            sunLight.position.set(5, 10, 7);
-            sunLight.name = "sunlight";
-            scene.add(sunLight);
-
-            loadPreset('core');
-            animate();
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            if (isOrbiting && currentMesh) {
-                currentMesh.rotation.x += 0.005;
-                currentMesh.rotation.y += 0.008;
-            }
-
-            renderer.render(scene, camera);
-        }
-
-        window.addEventListener('resize', () => {
-            const container = document.getElementById('canvas-container');
-            if(!container) return;
-            camera.aspect = container.clientWidth / container.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(container.clientWidth, container.clientHeight);
-        });
-
-        function updateSunlight(val) {
-            document.getElementById('light-val').innerText = val + ":00";
-            const sun = scene.getObjectByName("sunlight");
-            if (sun) sun.intensity = val / 12;
-        }
-
-        function getSelectedMaterial() {
-            if (currentMaterialType === 'metallic') {
-                return new THREE.MeshStandardMaterial({ color: 0x3b82f6, metalness: 0.8, roughness: 0.2 });
-            } else if (currentMaterialType === 'glass') {
-                return new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, transmission: 0.9, opacity: 0.8, transparent: true, roughness: 0 });
-            } else {
-                return new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true });
-            }
-        }
-
-        function changeMaterial(type) {
-            currentMaterialType = type;
-            if (currentMesh) {
-                currentMesh.material = getSelectedMaterial();
-            }
-        }
-
-        function toggleOrbit() {
-            isOrbiting = !isOrbiting;
-            const btn = document.getElementById('orbit-btn');
-            btn.innerText = isOrbiting ? "Active" : "Paused";
-        }
-
-        function loadPreset(type) {
-            if (currentMesh) scene.remove(currentMesh);
-            let geom;
-            if (type === 'duplex') {
-                geom = new THREE.BoxGeometry(2.2, 1.8, 2.2);
-            } else if (type === 'drone') {
-                geom = new THREE.TorusKnotGeometry(1.1, 0.3, 100, 16);
-            } else {
-                geom = new THREE.IcosahedronGeometry(1.4, 1);
-            }
-
-            currentMesh = new THREE.Mesh(geom, getSelectedMaterial());
-            scene.add(currentMesh);
-        }
-
-        // FORCE RENDER DYNAMIC 3D FUNCTION
-        function generate3DSimulation() {
-            const input = document.getElementById('prompt-input');
-            const prompt = input.value.trim().toLowerCase();
-            
-            if (!prompt) {
-                alert("Please type something in the prompt box!");
+            if(!urlInput) {
+                alert('దయచేసి ఏదైనా ఈ-కామర్స్ ప్రాడక్ట్ లింక్ ఇక్కడ పేస్ట్ చేయండి!');
                 return;
             }
 
-            const statusText = document.getElementById('ai-status-text');
-            const genBtn = document.getElementById('gen-btn');
-
-            statusText.innerText = "Generating 3D " + prompt.toUpperCase() + "...";
-            genBtn.innerText = "Building...";
-
-            // Remove existing mesh completely
-            if (currentMesh) {
-                scene.remove(currentMesh);
-            }
-
-            let geom;
-
-            if (prompt.includes('house') || prompt.includes('duplex') || prompt.includes('home') || prompt.includes('building')) {
-                // Architectural Building Box
-                geom = new THREE.BoxGeometry(2.4, 2.0, 2.0);
-            } else if (prompt.includes('drone') || prompt.includes('car') || prompt.includes('plane') || prompt.includes('machine')) {
-                // Mechanical Frame
-                geom = new THREE.TorusKnotGeometry(1.2, 0.3, 100, 16);
-            } else if (prompt.includes('sphere') || prompt.includes('planet') || prompt.includes('ball') || prompt.includes('orb')) {
-                // Sphere
-                geom = new THREE.SphereGeometry(1.5, 32, 32);
-            } else {
-                // Default Torus Geometry for other prompts
-                geom = new THREE.TorusGeometry(1.3, 0.4, 16, 100);
-            }
-
-            currentMesh = new THREE.Mesh(geom, getSelectedMaterial());
-            scene.add(currentMesh);
-
-            setTimeout(() => {
-                statusText.innerText = "Spatial AI Engine Active (60 FPS)";
-                genBtn.innerText = "Generate";
-            }, 400);
+            // Show Loading & Results
+            const resultsSection = document.getElementById('results');
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
         }
 
-        function export3DModel() { alert("Exporting 3D Model (.OBJ format)"); }
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        // Auto Affiliate Link Redirect Engine
+        function redirectAffiliate(event, storeName) {
+            event.preventDefault();
+            
+            let originalTargetUrl = "";
+            let affiliateUrl = "";
 
-        window.onload = init3D;
+            // Dynamic URL Rewriting Engine
+            if(storeName === 'amazon') {
+                originalTargetUrl = "https://www.amazon.in/dp/B0BDJ222KF";
+                affiliateUrl = `${originalTargetUrl}?tag=${AFFILIATE_IDS.amazon}`;
+            } else if(storeName === 'flipkart') {
+                originalTargetUrl = "https://www.flipkart.com/p/itm123456";
+                affiliateUrl = `https://links.cuelinks.com?id=YOUR_CUELINKS_ID&url=${encodeURIComponent(originalTargetUrl)}`;
+            } else {
+                originalTargetUrl = "https://www.tatacliq.com/p-mp000000";
+                affiliateUrl = originalTargetUrl;
+            }
+
+            // Open Affiliate Link in New Tab
+            window.open(affiliateUrl, '_blank');
+        }
     </script>
 </body>
 </html>
-                    
