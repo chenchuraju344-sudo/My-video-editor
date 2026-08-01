@@ -36,7 +36,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col overflow-x-hidden select-none">
 
-    <!-- 1. TOP NAVBAR -->
+    <!-- TOP NAVBAR -->
     <header class="h-16 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md px-4 flex items-center justify-between sticky top-0 z-50">
         <div class="flex items-center gap-2">
             <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
@@ -58,14 +58,13 @@
         </div>
     </header>
 
-    <!-- 2. MAIN WORKSPACE -->
+    <!-- MAIN WORKSPACE -->
     <div class="flex-1 flex flex-col lg:flex-row relative overflow-hidden">
         
-        <!-- CENTER 3D VIEWPORT -->
+        <!-- 3D VIEWPORT -->
         <div class="w-full h-[45vh] lg:h-auto lg:flex-1 relative bg-slate-950 border-b lg:border-b-0 border-slate-800">
             <div id="canvas-container"></div>
 
-            <!-- Floating Status -->
             <div class="absolute top-3 left-3 glass-panel px-3 py-1 rounded-full text-[10px] font-mono text-emerald-400 flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                 <span id="ai-status-text">Spatial AI Engine Active (60 FPS)</span>
@@ -75,7 +74,6 @@
         <!-- CONTROL PANEL -->
         <div class="w-full lg:w-80 bg-slate-950/95 p-4 flex flex-col gap-4 overflow-y-auto max-h-[45vh] lg:max-h-none border-r border-slate-800">
             
-            <!-- Quick Material Switcher -->
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">Surface Material</span>
                 <div class="grid grid-cols-3 gap-2 text-xs">
@@ -85,7 +83,6 @@
                 </div>
             </div>
 
-            <!-- Environment Controls -->
             <div class="glass-panel p-3 rounded-xl space-y-3">
                 <div class="flex justify-between text-xs text-slate-300">
                     <span>Sunlight Angle</span>
@@ -99,7 +96,6 @@
                 </div>
             </div>
 
-            <!-- Instant Templates -->
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">3D AI Presets</span>
                 <div class="grid grid-cols-3 gap-2">
@@ -111,13 +107,13 @@
         </div>
     </div>
 
-    <!-- 3. AI PROMPT BAR -->
+    <!-- AI PROMPT BAR -->
     <div class="p-3 bg-slate-950 border-t border-slate-800/80 sticky bottom-0 z-40">
         <div class="glass-panel p-1.5 rounded-xl shadow-2xl flex items-center gap-2 border-slate-700/60 max-w-xl mx-auto">
             <div class="pl-2 text-blue-400">
                 <i data-lucide="sparkles" class="w-4 h-4 animate-pulse"></i>
             </div>
-            <input type="text" id="prompt-input" placeholder="Type prompt (e.g., 'Modern house 3d')" class="w-full bg-transparent border-none text-xs text-white placeholder-slate-500 focus:outline-none py-1.5">
+            <input type="text" id="prompt-input" placeholder="Type prompt (e.g., 'Modern house', 'Drone')" class="w-full bg-transparent border-none text-xs text-white placeholder-slate-500 focus:outline-none py-1.5">
             <button onclick="generate3DSimulation()" id="gen-btn" class="glow-btn bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 shrink-0 transition">
                 <span>Generate</span>
                 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
@@ -156,7 +152,7 @@
 
         let scene, camera, renderer, currentMesh;
         let isOrbiting = true;
-        let currentMaterialType = 'neon';
+        let currentMaterialType = 'metallic';
 
         function init3D() {
             const container = document.getElementById('canvas-container');
@@ -173,7 +169,7 @@
             renderer.setPixelRatio(window.devicePixelRatio);
             container.appendChild(renderer.domElement);
 
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
             scene.add(ambientLight);
 
             const sunLight = new THREE.DirectionalLight(0x38bdf8, 1.5);
@@ -212,7 +208,7 @@
 
         function getSelectedMaterial() {
             if (currentMaterialType === 'metallic') {
-                return new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.1 });
+                return new THREE.MeshStandardMaterial({ color: 0x3b82f6, metalness: 0.8, roughness: 0.2 });
             } else if (currentMaterialType === 'glass') {
                 return new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, transmission: 0.9, opacity: 0.8, transparent: true, roughness: 0 });
             } else {
@@ -237,13 +233,10 @@
             if (currentMesh) scene.remove(currentMesh);
             let geom;
             if (type === 'duplex') {
-                // Duplex House Geometry
                 geom = new THREE.BoxGeometry(2.2, 1.8, 2.2);
             } else if (type === 'drone') {
-                // Drone Mechanical Frame
                 geom = new THREE.TorusKnotGeometry(1.1, 0.3, 100, 16);
             } else {
-                // Core
                 geom = new THREE.IcosahedronGeometry(1.4, 1);
             }
 
@@ -251,44 +244,50 @@
             scene.add(currentMesh);
         }
 
-        // DYNAMIC 3D GENERATOR BASED ON PROMPT MAP
+        // FORCE RENDER DYNAMIC 3D FUNCTION
         function generate3DSimulation() {
-            const prompt = document.getElementById('prompt-input').value.trim();
-            if (!prompt) return alert("Please enter a 3D prompt!");
+            const input = document.getElementById('prompt-input');
+            const prompt = input.value.trim().toLowerCase();
+            
+            if (!prompt) {
+                alert("Please type something in the prompt box!");
+                return;
+            }
 
             const statusText = document.getElementById('ai-status-text');
             const genBtn = document.getElementById('gen-btn');
 
-            statusText.innerText = "Generating 3D Spatial Mesh...";
-            genBtn.innerText = "Processing...";
+            statusText.innerText = "Generating 3D " + prompt.toUpperCase() + "...";
+            genBtn.innerText = "Building...";
+
+            // Remove existing mesh completely
+            if (currentMesh) {
+                scene.remove(currentMesh);
+            }
+
+            let geom;
+
+            if (prompt.includes('house') || prompt.includes('duplex') || prompt.includes('home') || prompt.includes('building')) {
+                // Architectural Building Box
+                geom = new THREE.BoxGeometry(2.4, 2.0, 2.0);
+            } else if (prompt.includes('drone') || prompt.includes('car') || prompt.includes('plane') || prompt.includes('machine')) {
+                // Mechanical Frame
+                geom = new THREE.TorusKnotGeometry(1.2, 0.3, 100, 16);
+            } else if (prompt.includes('sphere') || prompt.includes('planet') || prompt.includes('ball') || prompt.includes('orb')) {
+                // Sphere
+                geom = new THREE.SphereGeometry(1.5, 32, 32);
+            } else {
+                // Default Torus Geometry for other prompts
+                geom = new THREE.TorusGeometry(1.3, 0.4, 16, 100);
+            }
+
+            currentMesh = new THREE.Mesh(geom, getSelectedMaterial());
+            scene.add(currentMesh);
 
             setTimeout(() => {
-                if (currentMesh) scene.remove(currentMesh);
-
-                const lowerPrompt = prompt.toLowerCase();
-                let geom;
-
-                if (lowerPrompt.includes('house') || lowerPrompt.includes('duplex') || lowerPrompt.includes('building') || lowerPrompt.includes('room') || lowerPrompt.includes('home')) {
-                    // Modern House Architectural Box
-                    geom = new THREE.BoxGeometry(2.4, 2.0, 2.2);
-                } else if (lowerPrompt.includes('drone') || lowerPrompt.includes('car') || lowerPrompt.includes('plane') || lowerPrompt.includes('bike') || lowerPrompt.includes('machine')) {
-                    // Mechanical Vehicle Frame
-                    geom = new THREE.TorusKnotGeometry(1.2, 0.3, 100, 16);
-                } else if (lowerPrompt.includes('sphere') || lowerPrompt.includes('planet') || lowerPrompt.includes('ball') || lowerPrompt.includes('orb') || lowerPrompt.includes('earth')) {
-                    // Spherical Shape
-                    geom = new THREE.SphereGeometry(1.5, 32, 32);
-                } else if (lowerPrompt.includes('cube') || lowerPrompt.includes('box')) {
-                    geom = new THREE.BoxGeometry(2, 2, 2);
-                } else {
-                    geom = new THREE.DodecahedronGeometry(1.5);
-                }
-
-                currentMesh = new THREE.Mesh(geom, getSelectedMaterial());
-                scene.add(currentMesh);
-
                 statusText.innerText = "Spatial AI Engine Active (60 FPS)";
                 genBtn.innerText = "Generate";
-            }, 500);
+            }, 400);
         }
 
         function export3DModel() { alert("Exporting 3D Model (.OBJ format)"); }
@@ -299,3 +298,4 @@
     </script>
 </body>
 </html>
+                    
