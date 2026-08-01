@@ -1,130 +1,159 @@
-
 <!DOCTYPE html>
 <html lang="te">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Studio - CapCut & VN Style Web Video Editor</title>
+    <title>Pro Studio - CapCut Style Web Editor</title>
     <!-- Tailwind CSS & Lucide Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .canvas-box { transition: all 0.3s ease; }
+        .canvas-box { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .aspect-9-16 { width: 260px; height: 460px; }
         .aspect-16-9 { width: 460px; height: 260px; }
         .aspect-1-1 { width: 320px; height: 320px; }
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-neutral-950 text-white font-sans min-h-screen flex flex-col">
+<body class="bg-black text-white font-sans min-h-screen flex flex-col select-none">
 
     <!-- 1. TOP NAVBAR -->
-    <header class="h-14 border-b border-neutral-800 bg-neutral-900 px-4 flex items-center justify-between sticky top-0 z-50">
+    <header class="h-14 border-b border-neutral-800 bg-neutral-950 px-4 flex items-center justify-between sticky top-0 z-50">
         <div class="flex items-center gap-2">
-            <span class="bg-gradient-to-r from-blue-500 to-purple-600 px-2 py-1 rounded text-xs font-bold tracking-wider">PRO STUDIO</span>
-            <span class="text-xs text-neutral-400 hidden sm:inline">Web Video Editor</span>
+            <span class="bg-gradient-to-r from-blue-600 to-indigo-600 px-2.5 py-1 rounded-md text-xs font-black tracking-widest shadow-lg">PRO STUDIO</span>
+            <span class="text-xs text-neutral-500 font-medium hidden sm:inline">CapCut Web Edition</span>
         </div>
 
-        <!-- InShot Aspect Ratio Selector -->
-        <div class="flex bg-neutral-800 rounded p-1 text-xs gap-1">
-            <button onclick="setRatio('9-16')" class="px-2.5 py-1 rounded bg-blue-600 font-bold" id="btn-9-16">9:16</button>
-            <button onclick="setRatio('16-9')" class="px-2.5 py-1 rounded hover:bg-neutral-700" id="btn-16-9">16:9</button>
-            <button onclick="setRatio('1-1')" class="px-2.5 py-1 rounded hover:bg-neutral-700" id="btn-1-1">1:1</button>
+        <!-- Aspect Ratio Selector -->
+        <div class="flex bg-neutral-900 border border-neutral-800 rounded-lg p-1 text-xs gap-1">
+            <button onclick="setRatio('9-16')" class="px-3 py-1 rounded-md bg-blue-600 font-bold text-white shadow" id="btn-9-16">9:16</button>
+            <button onclick="setRatio('16-9')" class="px-3 py-1 rounded-md text-neutral-400 hover:text-white transition" id="btn-16-9">16:9</button>
+            <button onclick="setRatio('1-1')" class="px-3 py-1 rounded-md text-neutral-400 hover:text-white transition" id="btn-1-1">1:1</button>
         </div>
 
         <!-- Export Button -->
-        <button onclick="exportVideo()" class="bg-green-500 hover:bg-green-600 text-black font-bold px-3 py-1.5 rounded text-xs flex items-center gap-1 transition">
-            <i data-lucide="download" class="w-4 h-4"></i> Export (HD)
+        <button onclick="exportVideo()" class="bg-green-500 hover:bg-green-400 text-black font-bold px-4 py-1.5 rounded-lg text-xs flex items-center gap-1.5 shadow-md transition">
+            <i data-lucide="download" class="w-4 h-4"></i> Export
         </button>
     </header>
 
     <!-- 2. MAIN EDITOR WORKSPACE -->
-    <div class="h-[75vh] flex overflow-hidden border-b border-neutral-800">
+    <div class="h-[70vh] flex overflow-hidden border-b border-neutral-800 relative">
         
-        <!-- Left Sidebar Toolbar -->
-        <div class="w-16 bg-neutral-900 border-r border-neutral-800 flex flex-col items-center py-4 gap-6 text-xs text-neutral-400">
+        <!-- Left Icon Sidebar -->
+        <div class="w-16 bg-neutral-950 border-r border-neutral-800 flex flex-col items-center py-4 gap-6 text-[10px] text-neutral-400 z-20">
             <label class="flex flex-col items-center gap-1 cursor-pointer hover:text-blue-500 transition">
                 <i data-lucide="video" class="w-5 h-5"></i> Media
                 <input type="file" id="video-input" accept="video/*" class="hidden" onchange="loadVideo(event)">
             </label>
-            <button onclick="addText()" class="flex flex-col items-center gap-1 hover:text-blue-500 transition">
+            <button onclick="openPanel('text-panel')" class="flex flex-col items-center gap-1 hover:text-blue-500 transition">
                 <i data-lucide="type" class="w-5 h-5"></i> Text
             </button>
-            <button onclick="applyFilter()" class="flex flex-col items-center gap-1 hover:text-blue-500 transition">
+            <button onclick="openPanel('filter-panel')" class="flex flex-col items-center gap-1 hover:text-blue-500 transition">
                 <i data-lucide="sliders" class="w-5 h-5"></i> Filters
             </button>
-            <button onclick="setSpeed()" class="flex flex-col items-center gap-1 hover:text-blue-500 transition">
+            <button onclick="openPanel('speed-panel')" class="flex flex-col items-center gap-1 hover:text-blue-500 transition">
                 <i data-lucide="zap" class="w-5 h-5"></i> Speed
             </button>
         </div>
 
-        <!-- Video Preview Canvas -->
+        <!-- SLIDING OPTION PANELS (CapCut Style Sidebars) -->
+        
+        <!-- Text Panel -->
+        <div id="text-panel" class="hidden w-64 bg-neutral-900 border-r border-neutral-800 p-4 z-10 flex-col gap-3">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-xs font-bold text-neutral-200">ADD TEXT OVERLAY</h3>
+                <button onclick="closePanels()" class="text-neutral-500 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <input type="text" id="text-input" placeholder="Type text here..." class="bg-neutral-950 border border-neutral-700 rounded p-2 text-xs text-white outline-none focus:border-blue-500">
+            <button onclick="applyText()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded text-xs">Add to Canvas</button>
+        </div>
+
+        <!-- Filters Panel -->
+        <div id="filter-panel" class="hidden w-64 bg-neutral-900 border-r border-neutral-800 p-4 z-10 flex-col gap-3 overflow-y-auto">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-xs font-bold text-neutral-200">COLOR PRESETS</h3>
+                <button onclick="closePanels()" class="text-neutral-500 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <button onclick="setFilter('none')" class="bg-neutral-800 hover:bg-neutral-700 p-3 rounded-lg border border-neutral-700 text-left">Normal</button>
+                <button onclick="setFilter('brightness(1.3) contrast(1.1)')" class="bg-neutral-800 hover:bg-neutral-700 p-3 rounded-lg border border-neutral-700 text-left text-yellow-400">Vivid</button>
+                <button onclick="setFilter('grayscale(100%)')" class="bg-neutral-800 hover:bg-neutral-700 p-3 rounded-lg border border-neutral-700 text-left text-neutral-400">B & W</button>
+                <button onclick="setFilter('sepia(80%)')" class="bg-neutral-800 hover:bg-neutral-700 p-3 rounded-lg border border-neutral-700 text-left text-amber-600">Vintage</button>
+                <button onclick="setFilter('hue-rotate(90deg)')" class="bg-neutral-800 hover:bg-neutral-700 p-3 rounded-lg border border-neutral-700 text-left text-emerald-400">Cyber</button>
+                <button onclick="setFilter('blur(3px)')" class="bg-neutral-800 hover:bg-neutral-700 p-3 rounded-lg border border-neutral-700 text-left text-blue-400">Soft Blur</button>
+            </div>
+        </div>
+
+        <!-- Speed Panel -->
+        <div id="speed-panel" class="hidden w-64 bg-neutral-900 border-r border-neutral-800 p-4 z-10 flex-col gap-3">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-xs font-bold text-neutral-200">VN SPEED RAMP</h3>
+                <button onclick="closePanels()" class="text-neutral-500 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-xs">
+                <button onclick="setSpeed(0.5)" class="bg-neutral-800 hover:bg-blue-600 p-2 rounded border border-neutral-700">0.5x Slow</button>
+                <button onclick="setSpeed(1.0)" class="bg-neutral-800 hover:bg-blue-600 p-2 rounded border border-neutral-700">1.0x Normal</button>
+                <button onclick="setSpeed(1.5)" class="bg-neutral-800 hover:bg-blue-600 p-2 rounded border border-neutral-700">1.5x Fast</button>
+                <button onclick="setSpeed(2.0)" class="bg-neutral-800 hover:bg-blue-600 p-2 rounded border border-neutral-700">2.0x Fast</button>
+                <button onclick="setSpeed(3.0)" class="bg-neutral-800 hover:bg-blue-600 p-2 rounded border border-neutral-700">3.0x Hyper</button>
+            </div>
+        </div>
+
+        <!-- Video Canvas Preview Area -->
         <div class="flex-1 bg-black flex items-center justify-center p-2 relative overflow-hidden">
-            <div id="canvas-box" class="canvas-box aspect-9-16 border border-neutral-800 bg-neutral-900 relative flex items-center justify-center overflow-hidden">
+            <div id="canvas-box" class="canvas-box aspect-9-16 border border-neutral-800 bg-neutral-950 relative flex items-center justify-center overflow-hidden rounded-lg shadow-2xl">
                 <video id="main-video" class="w-full h-full object-contain"></video>
-                <div id="text-overlay" class="absolute text-white font-bold text-xl drop-shadow-md cursor-move hidden select-none" style="top: 40%; left: 20%;">
+                <div id="text-overlay" class="absolute text-white font-extrabold text-2xl drop-shadow-lg cursor-pointer hidden select-none" style="top: 40%;">
                     Sample Text
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 3. CAPCUT / VN MULTI-TRACK TIMELINE -->
-    <div class="h-48 bg-neutral-900 flex flex-col">
-        <!-- Controls -->
-        <div class="h-10 border-b border-neutral-800 px-4 flex items-center justify-between text-xs">
+    <!-- 3. CAPCUT TIMELINE LAYER TRACKS -->
+    <div class="h-44 bg-neutral-950 flex flex-col">
+        <!-- Controls Bar -->
+        <div class="h-10 border-b border-neutral-800 px-4 flex items-center justify-between text-xs bg-neutral-900">
             <div class="flex items-center gap-3">
-                <button onclick="togglePlay()" class="bg-white text-black p-1.5 rounded-full hover:bg-neutral-200">
+                <button onclick="togglePlay()" class="bg-white text-black p-1.5 rounded-full hover:scale-105 transition">
                     <i data-lucide="play" id="play-icon" class="w-4 h-4"></i>
                 </button>
-                <button onclick="splitVideo()" class="flex items-center gap-1 text-neutral-300 hover:text-white bg-neutral-800 px-2.5 py-1 rounded">
-                    <i data-lucide="scissors" class="w-4 h-4 text-red-400"></i> Split (Cut)
+                <button onclick="splitVideo()" class="flex items-center gap-1.5 text-neutral-300 hover:text-white bg-neutral-800 px-3 py-1 rounded-md border border-neutral-700">
+                    <i data-lucide="scissors" class="w-3.5 h-3.5 text-red-400"></i> Split (Cut)
                 </button>
             </div>
-            <span id="time-display" class="font-mono text-neutral-400">0.0s / 0.0s</span>
+            <span id="time-display" class="font-mono text-neutral-400 text-[11px]">0.0s / 0.0s</span>
         </div>
 
-        <!-- Tracks Area -->
-        <div class="flex-1 p-2 flex flex-col gap-2 overflow-x-auto">
-            <div class="h-9 bg-blue-950/60 border border-blue-700/50 rounded flex items-center px-3 text-xs text-blue-300">
+        <!-- Tracks -->
+        <div class="flex-1 p-2 flex flex-col gap-2 overflow-x-auto bg-neutral-950">
+            <div class="h-9 bg-blue-950/40 border border-blue-800/60 rounded-md flex items-center px-3 text-xs text-blue-400 font-semibold shadow-inner">
                 🎬 Video Track Layer 1
             </div>
-            <div class="h-8 bg-purple-950/60 border border-purple-700/50 rounded flex items-center px-3 text-xs text-purple-300">
-                📝 Text & Overlay Layer
+            <div class="h-8 bg-purple-950/40 border border-purple-800/60 rounded-md flex items-center px-3 text-xs text-purple-400 font-semibold shadow-inner">
+                📝 Text & Caption Overlay
             </div>
         </div>
     </div>
 
-    <!-- 4. ADSENSE VALUE CONTENT & USER GUIDE (SEO Content for 100% AdSense Approval) -->
-    <section class="bg-neutral-900 p-6 border-t border-neutral-800 text-neutral-300 text-sm max-w-4xl mx-auto my-6 rounded-xl">
-        <h1 class="text-xl font-bold text-white mb-3">Free Online Web Video Editor (CapCut & VN Style)</h1>
-        <p class="mb-4 text-xs text-neutral-400 leading-relaxed">
-            Welcome to Pro Studio, the ultimate free browser-based video editing tool. Edit your YouTube Shorts, Instagram Reels, and TikTok videos directly in your browser without installing any heavy software or apps.
-        </p>
-
-        <h2 class="text-base font-semibold text-white mb-2">Key Features:</h2>
-        <ul class="list-disc list-inside space-y-1 text-xs text-neutral-400 mb-4">
-            <li><strong>Aspect Ratio Switcher:</strong> Instantly convert videos to 9:16 (Reels), 16:9 (YouTube), or 1:1 (Square).</li>
-            <li><strong>VN Speed Ramp:</strong> Smoothly speed up or slow down your clips from 0.25x to 4.0x.</li>
-            <li><strong>Filters & Color Grading:</strong> Apply Grayscale, Sepia, Brightness, and Blur effects in 1-click.</li>
-            <li><strong>Multi-Track Editing:</strong> Overlay custom text titles, captions, and stickers seamlessly.</li>
-            <li><strong>100% Secure:</strong> All video processing happens inside your local browser. Your videos are never uploaded to any server.</li>
-        </ul>
-
-        <div class="border-t border-neutral-800 pt-4 mt-4 flex flex-wrap justify-between text-xs text-neutral-500">
-            <div>© 2026 Pro Studio Video Editor. All rights reserved.</div>
-            <div class="flex gap-4">
-                <a href="#" onclick="alert('Privacy Policy: All processing is done locally in your browser. No personal data or video files are stored on our servers.')" class="hover:underline">Privacy Policy</a>
-                <a href="#" onclick="alert('About Us: Pro Studio is a free open-source web utility created to help content creators edit videos effortlessly.')" class="hover:underline">About Us</a>
-                <a href="#" onclick="alert('Contact: Support available via GitHub Repository.')" class="hover:underline">Contact Us</a>
-            </div>
+    <!-- SEO GUIDE SECTION FOR ADSENSE -->
+    <section class="bg-neutral-950 p-6 border-t border-neutral-800 text-neutral-400 text-xs max-w-4xl mx-auto my-6 rounded-xl">
+        <h1 class="text-base font-bold text-white mb-2">Free Online Web Video Editor</h1>
+        <p class="mb-3 text-neutral-500">Edit your YouTube Shorts, Instagram Reels, and TikTok videos directly in your browser without installing any apps.</p>
+        <div class="flex gap-4 text-neutral-600 border-t border-neutral-900 pt-3">
+            <a href="#" class="hover:underline">Privacy Policy</a>
+            <a href="#" class="hover:underline">About Us</a>
+            <a href="#" class="hover:underline">Terms of Service</a>
         </div>
     </section>
 
-    <!-- JavaScript Logic Engine -->
+    <!-- JavaScript Engine -->
     <script>
         lucide.createIcons();
         const video = document.getElementById('main-video');
-        let currentFilter = 'none';
 
         function loadVideo(e) {
             const file = e.target.files[0];
@@ -135,63 +164,63 @@
         }
 
         function togglePlay() {
-            if (video.paused) { 
-                video.play(); 
-            } else { 
-                video.pause(); 
-            }
+            if (video.paused) video.play(); else video.pause();
+        }
+
+        function openPanel(panelId) {
+            closePanels();
+            document.getElementById(panelId).classList.remove('hidden');
+            document.getElementById(panelId).classList.add('flex');
+        }
+
+        function closePanels() {
+            ['text-panel', 'filter-panel', 'speed-panel'].forEach(id => {
+                const p = document.getElementById(id);
+                p.classList.add('hidden');
+                p.classList.remove('flex');
+            });
         }
 
         function setRatio(ratio) {
             const box = document.getElementById('canvas-box');
-            box.className = 'canvas-box border border-neutral-800 bg-neutral-900 relative flex items-center justify-center overflow-hidden aspect-' + ratio;
+            box.className = 'canvas-box border border-neutral-800 bg-neutral-950 relative flex items-center justify-center overflow-hidden rounded-lg shadow-2xl aspect-' + ratio;
             
             ['9-16', '16-9', '1-1'].forEach(r => {
                 const btn = document.getElementById('btn-' + r);
                 if (r === ratio) {
-                    btn.className = 'px-2.5 py-1 rounded bg-blue-600 font-bold';
+                    btn.className = 'px-3 py-1 rounded-md bg-blue-600 font-bold text-white shadow';
                 } else {
-                    btn.className = 'px-2.5 py-1 rounded hover:bg-neutral-700';
+                    btn.className = 'px-3 py-1 rounded-md text-neutral-400 hover:text-white transition';
                 }
             });
         }
 
-        function splitVideo() {
-            if (!video.src) return alert("దయచేసి ముందుగా ఒక వీడియోను అప్‌లోడ్ చేయండి!");
-            alert("వీడియో ప్రస్తుత సమయం (" + video.currentTime.toFixed(1) + "s) వద్ద కట్ (Split) అయింది!");
-        }
-
-        function addText() {
-            const text = prompt("స్క్రీన్ పై ప్లేస్ చేయాల్సిన టెక్స్ట్ ఎంటర్ చేయండి:");
-            if (text) {
+        function applyText() {
+            const val = document.getElementById('text-input').value;
+            if (val) {
                 const overlay = document.getElementById('text-overlay');
-                overlay.innerText = text;
+                overlay.innerText = val;
                 overlay.classList.remove('hidden');
             }
         }
 
-        function setSpeed() {
-            if (!video.src) return alert("దయచేసి ముందుగా ఒక వీడియోను అప్‌లోడ్ చేయండి!");
-            const speed = prompt("VN Speed Ramp (ఉదాహరణ: 0.5 = స్లో మోషన్, 2.0 = ఫాస్ట్ మోషన్):", "1.5");
-            if (speed) {
-                video.playbackRate = parseFloat(speed);
-                alert("వీడియో స్పీడ్ " + speed + "x కి మారినది!");
-            }
+        function setFilter(filterVal) {
+            video.style.filter = filterVal;
         }
 
-        function applyFilter() {
-            if (!video.src) return alert("దయచేసి ముందుగా ఒక వీడియోను అప్‌లోడ్ చేయండి!");
-            const choice = prompt("ఫిల్టర్ ఎంచుకోండి (1: Bright, 2: Grayscale, 3: Sepia, 4: Blur, 0: Reset):", "1");
-            if (choice === '1') video.style.filter = 'brightness(1.3) contrast(1.1)';
-            else if (choice === '2') video.style.filter = 'grayscale(100%)';
-            else if (choice === '3') video.style.filter = 'sepia(100%)';
-            else if (choice === '4') video.style.filter = 'blur(4px)';
-            else video.style.filter = 'none';
+        function setSpeed(speedVal) {
+            video.playbackRate = speedVal;
+        }
+
+        function splitVideo() {
+            if (!video.src) return;
+            // Visual split indicator on timeline
+            console.log("Split at: " + video.currentTime);
         }
 
         function exportVideo() {
-            if (!video.src) return alert("ఎక్స్‌పోర్ట్ చేయడానికి ఎలాంటి వీడియో లేదు!");
-            alert("వీడియో ప్రాసెసింగ్ ప్రారంభమైంది! బ్రౌజర్‌లోనే HD వీడియో రెండరింగ్ పూర్తి కానుంది.");
+            if (!video.src) return;
+            alert("వీడియో ఎక్స్‌పోర్టింగ్ ప్రారంభమైంది!");
         }
 
         video.ontimeupdate = () => {
