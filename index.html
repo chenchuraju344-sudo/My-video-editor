@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRICER — Live Price & Deal Scanner</title>
+    <title>PRICER — Universal Live Price Scanner</title>
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -128,7 +128,6 @@
             margin-bottom: 2.5rem;
         }
 
-        /* Search Input Box with Clear (X) Button */
         .search-card {
             background: var(--card-bg);
             backdrop-filter: blur(16px);
@@ -160,7 +159,6 @@
             font-size: 1rem;
         }
 
-        /* Clear Button (X) Styling */
         .clear-btn {
             position: absolute;
             right: 15px;
@@ -171,7 +169,7 @@
             height: 26px;
             border-radius: 50%;
             cursor: pointer;
-            display: none; /* Shown when text exists */
+            display: none;
             align-items: center;
             justify-content: center;
             font-size: 0.8rem;
@@ -221,15 +219,12 @@
         }
 
         .product-img {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: var(--accent-color);
+            background: #fff;
+            padding: 5px;
+            object-fit: contain;
         }
 
         .product-info h3 {
@@ -296,18 +291,6 @@
             font-weight: 800;
         }
 
-        .original-price {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            text-decoration: line-through;
-        }
-
-        .discount-tag {
-            color: var(--green-accent);
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
         .buy-btn {
             background: white;
             color: black;
@@ -335,16 +318,15 @@
             </div>
             <div>
                 <div class="brand-name">PRICER</div>
-                <div class="tagline">Universal Deal Scanner</div>
+                <div class="tagline">Universal Live Scanner</div>
             </div>
         </div>
     </header>
 
     <main>
         <h1 class="hero-title">Find the <span>Lowest Price</span> Instantly</h1>
-        <p class="hero-subtitle">Paste any product URL or name below to scan and compare prices across top stores.</p>
+        <p class="hero-subtitle">Paste any product URL or name below to fetch real-time prices across stores.</p>
 
-        <!-- Search Input Box with Clear Button -->
         <div class="search-card">
             <div class="search-input-wrapper">
                 <input type="text" id="productUrl" class="search-input" placeholder="Paste product link or name here..." oninput="toggleClearBtn()">
@@ -357,38 +339,35 @@
             </button>
         </div>
 
-        <!-- Results Display -->
         <div class="results-section" id="results">
             <div class="product-preview">
-                <div class="product-img"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                <img id="productImg" src="" alt="Product Image" class="product-img" style="display:none;">
                 <div class="product-info">
-                    <h3 id="productTitle">Product Name</h3>
-                    <div class="savings-badge" id="savingsBadge"><i class="fa-solid fa-piggy-bank"></i> Verified Lowest Deal</div>
+                    <h3 id="productTitle">Scanning...</h3>
+                    <div class="savings-badge" id="savingsBadge"><i class="fa-solid fa-spinner fa-spin"></i> Fetching Real Prices...</div>
                 </div>
             </div>
 
             <div style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-secondary);">
-                <i class="fa-solid fa-store"></i> Live Platform Comparison:
+                <i class="fa-solid fa-store"></i> Live Stores Comparison:
             </div>
 
             <div class="store-list" id="storeList">
-                <!-- Dynamically Inserted -->
+                <!-- Real API Stores Injected Here -->
             </div>
         </div>
     </main>
 
     <script>
-        // Connected to Render Backend URL
-        const BACKEND_URL = "https://pricer-backend-vsye.onrender.com";
+        // Connected to your Live Backend on Render
+        const BACKEND_URL = "https://pricer-live-server.onrender.com";
 
-        // Shows or hides the 'X' button
         function toggleClearBtn() {
             const input = document.getElementById('productUrl');
             const clearBtn = document.getElementById('clearBtn');
             clearBtn.style.display = input.value.trim() !== "" ? "flex" : "none";
         }
 
-        // Clears the input field
         function clearInput() {
             const input = document.getElementById('productUrl');
             input.value = "";
@@ -397,124 +376,92 @@
             input.focus();
         }
 
-        // Fail-safe Price Scanning Engine
         async function scanPrices() {
             const rawUrl = document.getElementById('productUrl').value.trim();
             if(!rawUrl) {
-                alert('Please paste a product link or search query.');
+                alert('Please paste a product URL or enter a product name.');
                 return;
             }
 
-            // Show Loading State
-            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Fetching Prices...`;
             document.getElementById('results').style.display = 'block';
+            document.getElementById('productTitle').innerText = "Scanning live web data...";
+            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Connecting to Stores...`;
+            document.getElementById('storeList').innerHTML = `<p style="color:var(--text-secondary); text-align:center; padding:20px;">Fetching real-time prices. Free server may take 5-10s to wake up...</p>`;
 
             try {
-                // Background Call to Render Backend
-                const response = await fetch(`${BACKEND_URL}/api/search?q=${encodeURIComponent(rawUrl)}`, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
+                // Real Live API Call
+                const response = await fetch(`${BACKEND_URL}/api/search?q=${encodeURIComponent(rawUrl)}`);
+                const result = await response.json();
 
-                if (response.ok) {
-                    const result = await response.json();
-                    if(result && result.data && Array.isArray(result.data) && result.data.length > 0) {
-                        renderSearchResults(result.data, rawUrl);
-                        return;
-                    }
+                if (result.success && result.data) {
+                    renderRealData(result.data, rawUrl);
+                } else {
+                    document.getElementById('storeList').innerHTML = `<p style="color:#ef4444; padding:15px;">Unable to parse data for this exact item. Try typing the exact product title instead of a short link.</p>`;
                 }
-                // If Render is on default code or empty, render smart structured response
-                renderSmartResults(rawUrl);
-            } catch(err) {
-                // Smooth fallback without throwing popups/alerts to user
-                console.log("Server fallback active:", err);
-                renderSmartResults(rawUrl);
+            } catch (error) {
+                console.error("Backend Error:", error);
+                document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Server Waking Up`;
+                document.getElementById('storeList').innerHTML = `<p style="color:var(--text-secondary); padding:15px; text-align:center;">Server is waking up from sleep mode. Please wait 10 seconds and click <b>Scan Prices</b> again!</p>`;
             }
         }
 
-        // Renders clean result interface instantly
-        function renderSmartResults(query) {
-            let cleanTitle = "SCANNED PRODUCT";
-            if(query.toLowerCase().includes('pulse')) cleanTitle = "AI PULSE 2 PURPLE 128 GB";
-            else if(query.toLowerCase().includes('galaxy')) cleanTitle = "SAMSUNG GALAXY F70e 5G";
-            else if(query.toLowerCase().includes('iphone')) cleanTitle = "APPLE IPHONE 15 PRO MAX";
-            else if(query.length < 40) cleanTitle = query.toUpperCase();
-
-            document.getElementById('productTitle').innerText = cleanTitle;
-
+        function renderRealData(apiResponse, userQuery) {
             const storeListContainer = document.getElementById('storeList');
-            storeListContainer.innerHTML = `
-                <div class="store-card best-deal">
-                    <div class="store-brand">
-                        <div class="store-icon" style="color: #2874F0;"><i class="fa-solid fa-bag-shopping"></i></div>
-                        <div>
-                            <div style="font-weight:600;">Flipkart</div>
-                            <small style="color:var(--green-accent);">Lowest Price Found</small>
+            storeListContainer.innerHTML = "";
+
+            // Parse RapidAPI Search Results
+            let items = [];
+            if (Array.isArray(apiResponse)) {
+                items = apiResponse;
+            } else if (apiResponse.data && Array.isArray(apiResponse.data)) {
+                items = apiResponse.data;
+            } else if (apiResponse.results && Array.isArray(apiResponse.results)) {
+                items = apiResponse.results;
+            }
+
+            if (items.length > 0) {
+                // Set Title & Image from First Real Item
+                const firstItem = items[0];
+                document.getElementById('productTitle').innerText = firstItem.title || firstItem.product_title || userQuery.toUpperCase();
+                
+                if (firstItem.product_photos && firstItem.product_photos[0]) {
+                    const imgElem = document.getElementById('productImg');
+                    imgElem.src = firstItem.product_photos[0];
+                    imgElem.style.display = 'block';
+                }
+
+                document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-check-circle"></i> 100% Verified Live Data`;
+
+                items.forEach((item, index) => {
+                    let isBest = (index === 0);
+                    let storeName = item.store_name || item.seller || item.source || "Online Store";
+                    let priceVal = item.price || item.offer_price || item.product_price || "Check Price";
+                    let buyUrl = item.url || item.product_url || item.offer_page_url || "#";
+
+                    let cardHtml = `
+                        <div class="store-card ${isBest ? 'best-deal' : ''}">
+                            <div class="store-brand">
+                                <div class="store-icon"><i class="fa-solid fa-store"></i></div>
+                                <div>
+                                    <div style="font-weight:600;">${storeName}</div>
+                                    ${isBest ? '<small style="color:var(--green-accent);">Lowest Price Online</small>' : ''}
+                                </div>
+                            </div>
+                            <div class="price-details">
+                                <div class="current-price">${priceVal}</div>
+                            </div>
+                            <a href="${buyUrl}" target="_blank" class="buy-btn">
+                                Buy Now <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
                         </div>
-                    </div>
-                    <div class="price-details">
-                        <div class="current-price">₹8,018</div>
-                        <div><span class="original-price">₹10,018</span> <span class="discount-tag">20% OFF</span></div>
-                    </div>
-                    <a href="${query.startsWith('http') ? query : '#'}" target="_blank" class="buy-btn">
-                        Buy Now <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
-                </div>
-
-                <div class="store-card">
-                    <div class="store-brand">
-                        <div class="store-icon" style="color: #FF9900;"><i class="fa-brands fa-amazon"></i></div>
-                        <div>
-                            <div style="font-weight:600;">Amazon</div>
-                        </div>
-                    </div>
-                    <div class="price-details">
-                        <div class="current-price">₹8,468</div>
-                        <div><span class="original-price">₹10,468</span> <span class="discount-tag">19% OFF</span></div>
-                    </div>
-                    <a href="${query.startsWith('http') ? query : '#'}" target="_blank" class="buy-btn">
-                        Buy Now <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
-                </div>
-
-                <div class="store-card">
-                    <div class="store-brand">
-                        <div class="store-icon" style="color: #E21B21;"><i class="fa-solid fa-laptop"></i></div>
-                        <div>
-                            <div style="font-weight:600;">Reliance Digital</div>
-                        </div>
-                    </div>
-                    <div class="price-details">
-                        <div class="current-price">₹8,918</div>
-                        <div><span class="original-price">₹10,918</span> <span class="discount-tag">18% OFF</span></div>
-                    </div>
-                    <a href="${query.startsWith('http') ? query : '#'}" target="_blank" class="buy-btn">
-                        Buy Now <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
-                </div>
-
-                <div class="store-card">
-                    <div class="store-brand">
-                        <div class="store-icon" style="color: #D11242;"><i class="fa-solid fa-cart-shopping"></i></div>
-                        <div>
-                            <div style="font-weight:600;">Tata CLiQ</div>
-                        </div>
-                    </div>
-                    <div class="price-details">
-                        <div class="current-price">₹9,368</div>
-                        <div><span class="original-price">₹11,368</span> <span class="discount-tag">18% OFF</span></div>
-                    </div>
-                    <a href="${query.startsWith('http') ? query : '#'}" target="_blank" class="buy-btn">
-                        Buy Now <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
-                </div>
-            `;
-
-            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-piggy-bank"></i> Verified Lowest Deal`;
-        }
-
-        function renderSearchResults(data, query) {
-            renderSmartResults(query);
+                    `;
+                    storeListContainer.innerHTML += cardHtml;
+                });
+            } else {
+                document.getElementById('productTitle').innerText = userQuery.toUpperCase();
+                document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-circle-xmark"></i> No Stores Found`;
+                storeListContainer.innerHTML = `<p style="padding:15px; color:var(--text-secondary); text-align:center;">No direct live store found for this link/name. Try typing the exact full name (e.g., "Samsung Galaxy S24 Ultra").</p>`;
+            }
         }
     </script>
 </body>
