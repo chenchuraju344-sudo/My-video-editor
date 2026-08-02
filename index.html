@@ -343,13 +343,12 @@
             </div>
 
             <div class="store-list" id="storeList">
-                <!-- Python Scraped Data Injected Here -->
+                <!-- Stores Injected Dynamically -->
             </div>
         </div>
     </main>
 
     <script>
-        // Connected to your REAL Python Live Scraper Backend
         const BACKEND_URL = "https://pricer-python-live.onrender.com";
 
         function toggleClearBtn() {
@@ -374,38 +373,35 @@
             }
 
             document.getElementById('results').style.display = 'block';
-            document.getElementById('productTitle').innerText = rawQuery.length > 35 ? "SCANNED ITEM" : rawQuery.toUpperCase();
-            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Scraping Live Market Rates...`;
-            document.getElementById('storeList').innerHTML = `<p style="color:var(--text-secondary); text-align:center; padding:20px;">Fetching live price data directly from stores. Please wait 3-5 seconds...</p>`;
+            document.getElementById('productTitle').innerText = "Scanning Web Stores...";
+            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Fetching All Store Prices...`;
+            document.getElementById('storeList').innerHTML = `<p style="color:var(--text-secondary); text-align:center; padding:20px;">Scanning Flipkart, Amazon, Tata CLiQ...</p>`;
 
             try {
-                // Call Python FastAPI Backend
                 const response = await fetch(`${BACKEND_URL}/api/search?q=${encodeURIComponent(rawQuery)}`);
                 const result = await response.json();
 
-                if (result.success && result.data && result.data.length > 0) {
-                    renderData(result.data);
-                } else {
-                    document.getElementById('storeList').innerHTML = `<p style="color:var(--text-secondary); text-align:center; padding:15px;">Could not fetch live price right now. Try typing the exact full product name.</p>`;
+                if (result.success && result.data) {
+                    document.getElementById('productTitle').innerText = result.title || rawQuery.toUpperCase();
+                    renderStores(result.data);
                 }
             } catch (error) {
-                console.error("Python Backend Error:", error);
-                document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Server Starting Up`;
-                document.getElementById('storeList').innerHTML = `<p style="color:var(--text-secondary); padding:15px; text-align:center;">Python server is waking up from free-tier sleep. Please wait 10 seconds and click <b>Scan Prices</b> again!</p>`;
+                console.error("Backend Error:", error);
+                document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Retrying...`;
             }
         }
 
-        function renderData(items) {
+        function renderStores(items) {
             const storeListContainer = document.getElementById('storeList');
             storeListContainer.innerHTML = "";
 
-            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-circle-check"></i> 100% Live Python Scraped Data`;
+            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-circle-check"></i> Multi-Store Comparison Loaded`;
 
             items.forEach((item, index) => {
-                let isBest = item.is_lowest || (index === 0);
-                let storeName = item.store_name || "Online Store";
-                let priceVal = item.price || "Check Site";
-                let buyUrl = item.url || "#";
+                let isBest = (index === 0);
+                let storeName = item.store_name;
+                let priceVal = item.price;
+                let buyUrl = item.url;
 
                 let cardHtml = `
                     <div class="store-card ${isBest ? 'best-deal' : ''}">
@@ -413,7 +409,7 @@
                             <div class="store-icon"><i class="fa-solid fa-store"></i></div>
                             <div>
                                 <div style="font-weight:600;">${storeName}</div>
-                                ${isBest ? '<small style="color:var(--green-accent);">Lowest Live Price</small>' : ''}
+                                ${isBest ? '<small style="color:var(--green-accent);">Direct Store Match</small>' : ''}
                             </div>
                         </div>
                         <div class="price-details">
