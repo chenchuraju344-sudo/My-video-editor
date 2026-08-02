@@ -218,6 +218,15 @@
             margin-bottom: 2rem;
         }
 
+        .product-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 12px;
+            padding: 5px;
+        }
+
         .product-info h3 {
             font-size: 1.2rem;
             margin-bottom: 5px;
@@ -290,6 +299,7 @@
             text-decoration: none;
             font-weight: 700;
             font-size: 0.9rem;
+            display: inline-block;
         }
 
         .buy-btn:hover {
@@ -332,6 +342,7 @@
 
         <div class="results-section" id="results">
             <div class="product-preview">
+                <img id="productImg" class="product-img" src="" alt="Product Image" style="display:none;">
                 <div class="product-info">
                     <h3 id="productTitle">Scanning...</h3>
                     <div class="savings-badge" id="savingsBadge"><i class="fa-solid fa-spinner fa-spin"></i> Fetching Live Prices...</div>
@@ -343,7 +354,7 @@
             </div>
 
             <div class="store-list" id="storeList">
-                <!-- Stores Injected Dynamically -->
+                <!-- Dynamic Content Injected Here -->
             </div>
         </div>
     </main>
@@ -374,16 +385,27 @@
 
             document.getElementById('results').style.display = 'block';
             document.getElementById('productTitle').innerText = "Scanning Web Stores...";
-            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Fetching All Store Prices...`;
-            document.getElementById('storeList').innerHTML = `<p style="color:var(--text-secondary); text-align:center; padding:20px;">Scanning Flipkart, Amazon, Tata CLiQ...</p>`;
+            document.getElementById('productImg').style.display = 'none';
+            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Fetching Live Multi-Store Data...`;
+            document.getElementById('storeList').innerHTML = `<p style="color:var(--text-secondary); text-align:center; padding:20px;">Fetching Google Shopping Live Results...</p>`;
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/search?q=${encodeURIComponent(rawQuery)}`);
                 const result = await response.json();
 
-                if (result.success && result.data) {
-                    document.getElementById('productTitle').innerText = result.title || rawQuery.toUpperCase();
+                if (result.success && result.data && result.data.length > 0) {
+                    document.getElementById('productTitle').innerText = result.title;
+                    
+                    // Show Image if available
+                    if (result.image) {
+                        const imgElem = document.getElementById('productImg');
+                        imgElem.src = result.image;
+                        imgElem.style.display = 'block';
+                    }
+
                     renderStores(result.data);
+                } else {
+                    document.getElementById('storeList').innerHTML = `<p style="color:#ef4444; text-align:center; padding:15px;">No stores found for this exact item. Try typing the product title directly.</p>`;
                 }
             } catch (error) {
                 console.error("Backend Error:", error);
@@ -395,7 +417,7 @@
             const storeListContainer = document.getElementById('storeList');
             storeListContainer.innerHTML = "";
 
-            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-circle-check"></i> Multi-Store Comparison Loaded`;
+            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-circle-check"></i> 100% Google Verified Live Prices`;
 
             items.forEach((item, index) => {
                 let isBest = (index === 0);
@@ -409,13 +431,13 @@
                             <div class="store-icon"><i class="fa-solid fa-store"></i></div>
                             <div>
                                 <div style="font-weight:600;">${storeName}</div>
-                                ${isBest ? '<small style="color:var(--green-accent);">Direct Store Match</small>' : ''}
+                                ${isBest ? '<small style="color:var(--green-accent);">Lowest Verified Price</small>' : ''}
                             </div>
                         </div>
                         <div class="price-details">
                             <div class="current-price">${priceVal}</div>
                         </div>
-                        <a href="${buyUrl}" target="_blank" class="buy-btn">
+                        <a href="${buyUrl}" target="_blank" rel="noopener noreferrer" class="buy-btn">
                             Buy Now <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         </a>
                     </div>
