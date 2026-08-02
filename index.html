@@ -334,7 +334,7 @@
             <div class="product-preview">
                 <div class="product-info">
                     <h3 id="productTitle">Scanning...</h3>
-                    <div class="savings-badge" id="savingsBadge"><i class="fa-solid fa-spinner fa-spin"></i> Scanning Live Stores...</div>
+                    <div class="savings-badge" id="savingsBadge"><i class="fa-solid fa-spinner fa-spin"></i> Fetching Live Prices...</div>
                 </div>
             </div>
 
@@ -343,13 +343,14 @@
             </div>
 
             <div class="store-list" id="storeList">
-                <!-- Stores Injected Dynamically -->
+                <!-- Python Scraped Data Injected Here -->
             </div>
         </div>
     </main>
 
     <script>
-        const BACKEND_URL = "https://pricer-live-server.onrender.com";
+        // Connected to your REAL Python Live Scraper Backend
+        const BACKEND_URL = "https://pricer-python-live.onrender.com";
 
         function toggleClearBtn() {
             const input = document.getElementById('productUrl');
@@ -366,43 +367,44 @@
         }
 
         async function scanPrices() {
-            const rawUrl = document.getElementById('productUrl').value.trim();
-            if(!rawUrl) {
-                alert('Please paste a product URL or enter a product name.');
+            const rawQuery = document.getElementById('productUrl').value.trim();
+            if(!rawQuery) {
+                alert('Please enter a product name or paste a link.');
                 return;
             }
 
             document.getElementById('results').style.display = 'block';
-            document.getElementById('productTitle').innerText = rawUrl.length > 40 ? "SCANNED PRODUCT" : rawUrl.toUpperCase();
-            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Scanning Live Stores...`;
-            
+            document.getElementById('productTitle').innerText = rawQuery.length > 35 ? "SCANNED ITEM" : rawQuery.toUpperCase();
+            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Scraping Live Market Rates...`;
+            document.getElementById('storeList').innerHTML = `<p style="color:var(--text-secondary); text-align:center; padding:20px;">Fetching live price data directly from stores. Please wait 3-5 seconds...</p>`;
+
             try {
-                const response = await fetch(`${BACKEND_URL}/api/search?q=${encodeURIComponent(rawUrl)}`);
+                // Call Python FastAPI Backend
+                const response = await fetch(`${BACKEND_URL}/api/search?q=${encodeURIComponent(rawQuery)}`);
                 const result = await response.json();
 
-                if (result.success && result.data) {
-                    renderData(result.data, rawUrl);
+                if (result.success && result.data && result.data.length > 0) {
+                    renderData(result.data);
+                } else {
+                    document.getElementById('storeList').innerHTML = `<p style="color:var(--text-secondary); text-align:center; padding:15px;">Could not fetch live price right now. Try typing the exact full product name.</p>`;
                 }
             } catch (error) {
-                console.error("Connection Error:", error);
-                // Direct local display fallback
-                renderData([
-                    { store_name: "Flipkart", price: "₹8,018", is_lowest: true, url: rawUrl },
-                    { store_name: "Amazon", price: "₹8,468", is_lowest: false, url: rawUrl }
-                ], rawUrl);
+                console.error("Python Backend Error:", error);
+                document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Server Starting Up`;
+                document.getElementById('storeList').innerHTML = `<p style="color:var(--text-secondary); padding:15px; text-align:center;">Python server is waking up from free-tier sleep. Please wait 10 seconds and click <b>Scan Prices</b> again!</p>`;
             }
         }
 
-        function renderData(items, query) {
+        function renderData(items) {
             const storeListContainer = document.getElementById('storeList');
             storeListContainer.innerHTML = "";
 
-            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-circle-check"></i> Live Lowest Price Verified`;
+            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-circle-check"></i> 100% Live Python Scraped Data`;
 
             items.forEach((item, index) => {
                 let isBest = item.is_lowest || (index === 0);
-                let storeName = item.store_name || item.seller || "Online Store";
-                let priceVal = item.price || item.offer_price || "Check Store";
+                let storeName = item.store_name || "Online Store";
+                let priceVal = item.price || "Check Site";
                 let buyUrl = item.url || "#";
 
                 let cardHtml = `
@@ -411,7 +413,7 @@
                             <div class="store-icon"><i class="fa-solid fa-store"></i></div>
                             <div>
                                 <div style="font-weight:600;">${storeName}</div>
-                                ${isBest ? '<small style="color:var(--green-accent);">Lowest Price Found</small>' : ''}
+                                ${isBest ? '<small style="color:var(--green-accent);">Lowest Live Price</small>' : ''}
                             </div>
                         </div>
                         <div class="price-details">
