@@ -342,12 +342,12 @@
 
     <main>
         <h1 class="hero-title">Find the <span>Lowest Price</span> Instantly</h1>
-        <p class="hero-subtitle">Paste any product URL below to scan and compare prices across top stores.</p>
+        <p class="hero-subtitle">Paste any product URL or name below to scan and compare prices across top stores.</p>
 
         <!-- Search Input Box with Clear Button -->
         <div class="search-card">
             <div class="search-input-wrapper">
-                <input type="text" id="productUrl" class="search-input" placeholder="Paste product link here..." oninput="toggleClearBtn()">
+                <input type="text" id="productUrl" class="search-input" placeholder="Paste product link or name here..." oninput="toggleClearBtn()">
                 <button class="clear-btn" id="clearBtn" onclick="clearInput()" title="Clear Text">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -394,65 +394,69 @@
             input.focus();
         }
 
-        // Deterministic Product Scanner (No Random Math)
-        function scanPrices() {
+        // API Scan Price Logic connected to Render Backend
+        async function scanPrices() {
             const rawUrl = document.getElementById('productUrl').value.trim();
             if(!rawUrl) {
-                alert('Please paste a product URL to compare.');
+                alert('Please paste a product link or search query.');
                 return;
             }
 
-            // Extract Name statically based on URL keyword
-            let productName = "Scanned Product";
-            if(rawUrl.toLowerCase().includes('ai-pulse') || rawUrl.toLowerCase().includes('pulse')) {
-                productName = "AI PULSE 2 PURPLE 128 GB";
-            } else if(rawUrl.toLowerCase().includes('iphone')) {
-                productName = "Apple iPhone 15 Pro Max 256GB";
-            } else {
-                productName = "Universal Scanned Item";
+            // Show Loading Animation
+            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Fetching Live Prices...`;
+            document.getElementById('results').style.display = 'block';
+
+            try {
+                // Connected to live Render Backend Service
+                const BACKEND_URL = "https://pricer-backend-vsye.onrender.com"; 
+                
+                const response = await fetch(`${BACKEND_URL}/api/search?q=${encodeURIComponent(rawUrl)}`);
+                const result = await response.json();
+
+                if(result.success && result.data) {
+                    renderSearchResults(result.data, rawUrl);
+                } else {
+                    alert("Error fetching live price data from server.");
+                }
+            } catch(err) {
+                console.error(err);
+                alert("Server is starting up... Please wait 10 seconds and click Scan again!");
             }
+        }
 
-            document.getElementById('productTitle').innerText = productName;
-
-            // Static Store Data Mapping (Consistent Prices)
-            const storeData = [
-                { name: "Flipkart", price: 8018, origPrice: 10018, discount: "20% OFF", icon: "fa-bag-shopping", color: "#2874F0", isBest: true },
-                { name: "Amazon", price: 8468, origPrice: 10468, discount: "19% OFF", icon: "fa-brands fa-amazon", color: "#FF9900", isBest: false },
-                { name: "Reliance Digital", price: 8918, origPrice: 10918, discount: "18% OFF", icon: "fa-laptop", color: "#E21B21", isBest: false },
-                { name: "Tata CLiQ", price: 9368, origPrice: 11368, discount: "18% OFF", icon: "fa-cart-shopping", color: "#D11242", isBest: false },
-                { name: "Meesho", price: 9818, origPrice: 11818, discount: "17% OFF", icon: "fa-shirt", color: "#F43397", isBest: false }
-            ];
-
+        function renderSearchResults(data, query) {
+            document.getElementById('productTitle').innerText = query.toUpperCase();
+            
             const storeListContainer = document.getElementById('storeList');
             storeListContainer.innerHTML = "";
 
-            storeData.forEach((store) => {
-                let cardHtml = `
-                    <div class="store-card ${store.isBest ? 'best-deal' : ''}">
-                        <div class="store-brand">
-                            <div class="store-icon" style="color: ${store.color};"><i class="fa-solid ${store.icon}"></i></div>
-                            <div>
-                                <div style="font-weight:600;">${store.name}</div>
-                                ${store.isBest ? '<small style="color:var(--green-accent);">Lowest Price Found</small>' : ''}
+            // Display Live Prices from RapidAPI Backend
+            if(Array.isArray(data) && data.length > 0) {
+                data.forEach((item, index) => {
+                    let isBest = (index === 0);
+                    let cardHtml = `
+                        <div class="store-card ${isBest ? 'best-deal' : ''}">
+                            <div class="store-brand">
+                                <div class="store-icon"><i class="fa-solid fa-store"></i></div>
+                                <div>
+                                    <div style="font-weight:600;">${item.store_name || item.seller || 'Online Store'}</div>
+                                    ${isBest ? '<small style="color:var(--green-accent);">Lowest Price Found</small>' : ''}
+                                </div>
                             </div>
-                        </div>
-                        <div class="price-details">
-                            <div class="current-price">₹${store.price.toLocaleString()}</div>
-                            <div>
-                                <span class="original-price">₹${store.origPrice.toLocaleString()}</span>
-                                <span class="discount-tag">${store.discount}</span>
+                            <div class="price-details">
+                                <div class="current-price">${item.price || 'Check Store'}</div>
                             </div>
+                            <a href="${item.url || '#'}" target="_blank" class="buy-btn">
+                                Buy Now <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
                         </div>
-                        <a href="${rawUrl}" target="_blank" class="buy-btn">
-                            Buy Now <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
-                    </div>
-                `;
-                storeListContainer.innerHTML += cardHtml;
-            });
-
-            document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-piggy-bank"></i> Verified Lowest Price Available`;
-            document.getElementById('results').style.display = 'block';
+                    `;
+                    storeListContainer.innerHTML += cardHtml;
+                });
+                document.getElementById('savingsBadge').innerHTML = `<i class="fa-solid fa-piggy-bank"></i> Verified Live Prices Fetched`;
+            } else {
+                storeListContainer.innerHTML = `<p style="padding:15px; color:var(--text-secondary);">No live price found for this query. Try typing the exact product name.</p>`;
+            }
         }
     </script>
 </body>
