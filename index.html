@@ -14,16 +14,14 @@
             color: #f3f4f6;
         }
         
-        /* Cyberpunk Grid Background */
         .cyber-grid {
             background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
                               linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
         }
 
-        /* 3D Dynamic Text Effects */
         .text-3d-glow {
-            text-shadow: 0 0 10px rgba(239, 68, 68, 0.5), 0 0 20px rgba(239, 68, 68, 0.3), 0 4px 6px rgba(0,0,0,0.8);
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.6), 0 0 20px rgba(239, 68, 68, 0.4), 0 4px 6px rgba(0,0,0,0.8);
         }
         .text-3d-metallic {
             background: linear-gradient(135deg, #ffffff 0%, #9ca3af 50%, #e5e7eb 100%);
@@ -32,9 +30,8 @@
             filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.9));
         }
 
-        /* Glassmorphic Cyber Cards */
         .glass-card {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(17, 24, 39, 0.75);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
@@ -44,8 +41,7 @@
             box-shadow: 0 0 25px rgba(239, 68, 68, 0.15);
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { height: 4px; width: 6px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #030712; }
         ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #ef4444; }
@@ -53,13 +49,22 @@
 </head>
 <body class="cyber-grid min-h-screen antialiased selection:bg-red-600 selection:text-white flex flex-col justify-between">
 
-    <div>
+    <!-- 3D INITIALIZATION SPLASH SCREEN -->
+    <div id="splashScreen" class="fixed inset-0 z-[100] bg-gray-950 flex flex-col items-center justify-center transition-opacity duration-700">
+        <canvas id="splash3dCanvas" width="120" height="120" class="mb-4 drop-shadow-[0_0_25px_rgba(239,68,68,0.8)]"></canvas>
+        <h1 class="text-3xl font-black uppercase tracking-widest flex items-center gap-1">
+            <span class="text-3d-metallic">DoBlood</span><span class="text-red-500 text-3d-glow">.online</span>
+        </h1>
+        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mt-2 animate-pulse">Initializing Cyber Network Engine...</p>
+    </div>
+
+    <div id="appBody" class="opacity-0 transition-opacity duration-500">
         <!-- TOP NAVIGATION BAR -->
-        <header class="sticky top-0 z-50 bg-gray-950/90 backdrop-blur-xl border-b border-gray-800/80 shadow-2xl">
-            <div class="container mx-auto px-4 py-3 flex justify-between items-center gap-3">
+        <header class="sticky top-0 z-50 bg-gray-950/80 backdrop-blur-xl border-b border-gray-800/80 shadow-2xl">
+            <div class="container mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
                 <div class="flex items-center gap-3 cursor-pointer select-none" onclick="showPage('home')">
-                    <!-- 3D Heartbeat Animated Canvas Logo -->
-                    <canvas id="heartCanvas" width="48" height="48" class="rounded-xl shadow-lg shadow-red-900/40"></canvas>
+                    <!-- NEW 3D ANIMATED LOGO CANVAS -->
+                    <canvas id="logo3dCanvas" width="44" height="44" class="rounded-xl shadow-lg shadow-red-900/40"></canvas>
                     <div>
                         <h1 class="text-xl md:text-2xl font-black tracking-wider uppercase flex items-center gap-1">
                             <span class="text-3d-metallic">DoBlood</span><span class="text-red-500 text-3d-glow">.online</span>
@@ -68,51 +73,28 @@
                     </div>
                 </div>
                 
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
                     <button onclick="showPage('home')" class="text-xs font-bold text-gray-300 hover:text-white bg-gray-900 border border-gray-800 px-3 py-1.5 rounded-xl transition-all cursor-pointer">
                         <i class="fa-solid fa-house text-red-500 mr-1"></i> Home
                     </button>
-                    <!-- 3-DOTS MENU TRIGGER -->
-                    <button onclick="toggleSideMenu()" class="text-gray-300 hover:text-white bg-gray-900 border border-gray-800 p-2.5 rounded-xl cursor-pointer transition-all">
-                        <i class="fa-solid fa-ellipsis-vertical text-lg"></i>
+                    <button onclick="showPage('manage-profile-page')" class="text-xs font-bold text-amber-400 hover:text-amber-300 bg-amber-950/40 border border-amber-800/50 px-3 py-1.5 rounded-xl transition-all cursor-pointer">
+                        <i class="fa-solid fa-user-gear mr-1"></i> Profile
+                    </button>
+                    <button onclick="showPage('aboutPage')" class="text-xs font-bold text-blue-400 hover:text-blue-300 bg-blue-950/40 border border-blue-800/50 px-3 py-1.5 rounded-xl transition-all cursor-pointer">
+                        <i class="fa-solid fa-circle-info mr-1"></i> About & Guide
                     </button>
                 </div>
             </div>
         </header>
 
-        <!-- SLIDE-IN OVERLAY MENU (PROFILE & ABOUT) -->
-        <div id="sideMenuOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity" onclick="toggleSideMenu()">
-            <div class="fixed right-0 top-0 h-full w-72 bg-gray-950 border-l border-gray-800 p-6 flex flex-col justify-between shadow-2xl" onclick="event.stopPropagation()">
-                <div>
-                    <div class="flex justify-between items-center border-b border-gray-800 pb-4 mb-6">
-                        <h3 class="font-black text-sm uppercase tracking-wider text-gray-300">Navigation Menu</h3>
-                        <button onclick="toggleSideMenu()" class="text-gray-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
-                    </div>
-                    <div class="space-y-3">
-                        <!-- Profile Button Top -->
-                        <button onclick="showPage('manage-profile-page'); toggleSideMenu();" class="w-full text-left p-3 rounded-xl bg-gray-900 border border-gray-800 hover:border-amber-500/50 flex items-center gap-3 text-xs font-bold text-gray-200 transition-all cursor-pointer">
-                            <i class="fa-solid fa-user-gear text-amber-400 text-base"></i> Profile Management
-                        </button>
-                        <!-- About & How to Use Below -->
-                        <button onclick="showPage('aboutPage'); toggleSideMenu();" class="w-full text-left p-3 rounded-xl bg-gray-900 border border-gray-800 hover:border-blue-500/50 flex items-center gap-3 text-xs font-bold text-gray-200 transition-all cursor-pointer">
-                            <i class="fa-solid fa-circle-info text-blue-400 text-base"></i> About & How to Use
-                        </button>
-                    </div>
-                </div>
-                <div class="text-[10px] text-gray-500 text-center font-semibold">
-                    Encrypted Protocol | DoBlood Network
-                </div>
-            </div>
-        </div>
-
-        <!-- LIVE TICKER MARQUEE (SCROLLS EMERGENCY ALERTS LIVE) -->
+        <!-- DYNAMIC LIVE MARQUEE TICKER -->
         <div class="bg-gray-900/90 border-b border-gray-800/60 py-2.5 overflow-hidden backdrop-blur-md">
             <div class="container mx-auto px-4 flex items-center gap-3">
                 <span class="bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-md uppercase tracking-widest shrink-0 shadow-lg shadow-red-900/40 flex items-center gap-1">
                     <i class="fa-solid fa-bolt text-amber-300"></i> ALERT:
                 </span>
-                <marquee id="alertMarquee" class="text-xs font-bold text-red-400 tracking-wide" scrollamount="5">
-                    Donate Blood — Save Human Lives. Your minimal effort restores hope in life. Join our decentralized community blood grid.
+                <marquee id="dynamicAlertMarquee" class="text-xs font-bold text-gray-300 tracking-wide" scrollamount="5">
+                    Donate Blood — Save Human Lives. Join our decentralized community blood grid.
                 </marquee>
             </div>
         </div>
@@ -131,116 +113,166 @@
         <!-- PAGE CONTAINER SYSTEM -->
         <div id="pageContainer">
 
-            <!-- PAGE 0: MAIN HOME DASHBOARD TABLE PAGE -->
+            <!-- PAGE 0: MAIN HOME DASHBOARD PAGE -->
             <main id="mainTablePage" class="container mx-auto px-4 pt-4 pb-12 max-w-6xl">
-
-                <!-- HORIZONTAL SINGLE-LINE DONOR STATS BAR -->
-                <section class="mb-6 overflow-x-auto pb-2">
-                    <div class="flex items-center gap-3 min-w-max">
-                        <div class="glass-card px-4 py-3 rounded-2xl flex items-center gap-3 border border-gray-800 shrink-0">
-                            <i class="fa-solid fa-users text-red-500 text-xl"></i>
-                            <div>
-                                <span class="text-[9px] font-black uppercase tracking-widest text-gray-400 block">Total Donors</span>
-                                <span id="statTotal" class="text-lg font-black text-3d-metallic">0</span>
-                            </div>
-                        </div>
-                        <div class="glass-card px-4 py-3 rounded-2xl flex items-center gap-3 border border-gray-800 shrink-0">
-                            <span class="bg-red-950 text-red-400 font-extrabold px-2 py-1 rounded-lg text-xs border border-red-800/50">A</span>
-                            <div>
-                                <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group A</span>
-                                <span id="statA" class="text-base font-black text-gray-200">0</span>
-                            </div>
-                        </div>
-                        <div class="glass-card px-4 py-3 rounded-2xl flex items-center gap-3 border border-gray-800 shrink-0">
-                            <span class="bg-red-950 text-red-400 font-extrabold px-2 py-1 rounded-lg text-xs border border-red-800/50">B</span>
-                            <div>
-                                <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group B</span>
-                                <span id="statB" class="text-base font-black text-gray-200">0</span>
-                            </div>
-                        </div>
-                        <div class="glass-card px-4 py-3 rounded-2xl flex items-center gap-3 border border-gray-800 shrink-0">
-                            <span class="bg-red-950 text-red-400 font-extrabold px-2 py-1 rounded-lg text-xs border border-red-800/50">O</span>
-                            <div>
-                                <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group O</span>
-                                <span id="statO" class="text-base font-black text-gray-200">0</span>
-                            </div>
-                        </div>
-                        <div class="glass-card px-4 py-3 rounded-2xl flex items-center gap-3 border border-gray-800 shrink-0">
-                            <span class="bg-red-950 text-red-400 font-extrabold px-2 py-1 rounded-lg text-xs border border-red-800/50">AB</span>
-                            <div>
-                                <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group AB</span>
-                                <span id="statAB" class="text-base font-black text-gray-200">0</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- MAIN DASHBOARD QUICK ACTIONS -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                    <button onclick="showPage('find-blood-page')" class="glass-card p-5 rounded-2xl flex items-center gap-4 transition-all hover:-translate-y-1 group cursor-pointer">
-                        <div class="bg-gray-800/80 text-red-500 p-3.5 rounded-xl text-2xl group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
+                <!-- MAIN ACTION CARDS -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <button onclick="showPage('find-blood-page')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
+                        <div class="bg-gray-800/80 text-red-500 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
                             <i class="fa-solid fa-magnifying-glass-location"></i>
                         </div>
-                        <div class="text-left">
-                            <span class="text-sm font-black text-gray-200 uppercase tracking-wider block">Find Donors</span>
-                            <span class="text-[10px] text-gray-400 font-medium">Search Network Registry</span>
-                        </div>
+                        <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Find Donors</span>
+                        <span class="text-[9px] text-gray-400 font-medium mt-0.5">Search Network</span>
                     </button>
 
-                    <button onclick="showPage('become-donor-page')" class="glass-card p-5 rounded-2xl flex items-center gap-4 transition-all hover:-translate-y-1 group cursor-pointer">
-                        <div class="bg-gray-800/80 text-emerald-400 p-3.5 rounded-xl text-2xl group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
+                    <button onclick="showPage('become-donor-page')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
+                        <div class="bg-gray-800/80 text-emerald-400 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
                             <i class="fa-solid fa-heart-pulse"></i>
                         </div>
-                        <div class="text-left">
-                            <span class="text-sm font-black text-gray-200 uppercase tracking-wider block">Become Donor</span>
-                            <span class="text-[10px] text-gray-400 font-medium">Join Community Registry</span>
-                        </div>
+                        <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Become Donor</span>
+                        <span class="text-[9px] text-gray-400 font-medium mt-0.5">Join Registry</span>
                     </button>
 
-                    <button onclick="showPage('helplinePage')" class="glass-card p-5 rounded-2xl flex items-center gap-4 transition-all hover:-translate-y-1 group cursor-pointer">
-                        <div class="bg-gray-800/80 text-cyan-400 p-3.5 rounded-xl text-2xl group-hover:scale-110 group-hover:bg-cyan-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
+                    <button onclick="showPage('emergencyAlertPage')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
+                        <div class="bg-gray-800/80 text-rose-500 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-rose-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
+                            <i class="fa-solid fa-bullhorn animate-pulse"></i>
+                        </div>
+                        <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Send Alert</span>
+                        <span class="text-[9px] text-gray-400 font-medium mt-0.5">Dispatch Emergency</span>
+                    </button>
+
+                    <button onclick="showPage('helplinePage')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
+                        <div class="bg-gray-800/80 text-cyan-400 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-cyan-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
                             <i class="fa-solid fa-hospital-user"></i>
                         </div>
-                        <div class="text-left">
-                            <span class="text-sm font-black text-gray-200 uppercase tracking-wider block">Blood Banks</span>
-                            <span class="text-[10px] text-gray-400 font-medium">Institutional Helpline Hubs</span>
-                        </div>
+                        <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Blood Banks</span>
+                        <span class="text-[9px] text-gray-400 font-medium mt-0.5">Helpline Hubs</span>
                     </button>
                 </div>
 
-                <!-- DISPATCH EMERGENCY ALERT SEPARATE BUTTON & PRIVACY PROTOCOL -->
-                <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <!-- Dispatch Emergency Alert Button Box -->
-                    <div class="glass-card p-6 rounded-3xl relative overflow-hidden border border-gray-800 flex flex-col justify-between">
-                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-amber-500"></div>
-                        <div>
-                            <div class="text-3xl text-red-500 mb-2"><i class="fa-solid fa-bullhorn animate-pulse"></i></div>
-                            <h3 class="text-lg font-black text-gray-200 uppercase tracking-wider mb-2">Dispatch Emergency Alert</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed mb-6">Need blood urgently? Submit patient requirement details to broadcast immediate alert notifications across the network ticker.</p>
+                <!-- DONOR METRICS BUTTON AND SUMMARY BAR -->
+                <button onclick="showPage('donorMetricsPage')" class="w-full glass-card p-4 rounded-2xl mb-8 flex items-center justify-between border border-gray-800 hover:border-red-500/50 transition-all cursor-pointer group">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-red-950 text-red-400 p-2.5 rounded-xl border border-red-800/50 group-hover:scale-110 transition-all">
+                            <i class="fa-solid fa-users-between-lines text-xl"></i>
                         </div>
-                        <button onclick="showPage('emergencyAlertPage')" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-3.5 px-4 rounded-xl shadow-lg shadow-red-950 text-xs uppercase tracking-wider flex justify-center items-center gap-2 cursor-pointer transition-all">
-                            <i class="fa-solid fa-paper-plane"></i> Launch Emergency Request Page
-                        </button>
+                        <div class="text-left">
+                            <h3 class="text-xs font-black text-gray-200 uppercase tracking-wider">Donor Statistics & Group Network</h3>
+                            <p class="text-[10px] text-gray-400">View live metrics & blood group availability distribution</p>
+                        </div>
                     </div>
+                    <i class="fa-solid fa-chevron-right text-gray-500 group-hover:text-white transition-all"></i>
+                </button>
 
-                    <!-- Privacy Assurance Banner -->
-                    <div class="glass-card p-6 rounded-3xl relative overflow-hidden border border-gray-800 flex flex-col justify-between">
-                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
-                        <div>
-                            <div class="text-3xl text-emerald-400 mb-2"><i class="fa-solid fa-shield-halved"></i></div>
-                            <h3 class="text-lg font-black text-gray-200 uppercase tracking-wider mb-2">Zero-Trust Privacy Protocol</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed mb-6">Donor data is encrypted and protected from tele-spam indexing. Log in with your registered phone number to search verified donors.</p>
-                        </div>
-                        <div class="flex gap-3">
-                            <button onclick="showPage('find-blood-page')" class="flex-1 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-200 font-bold py-3.5 px-3 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-all text-center">Locate Donors</button>
-                            <button onclick="showPage('become-donor-page')" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-emerald-950 cursor-pointer transition-all text-center">Join Network</button>
+                <!-- PRIVACY BANNER -->
+                <section class="glass-card p-6 md:p-8 rounded-3xl text-center relative overflow-hidden border border-gray-800">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
+                    <div class="max-w-xl mx-auto py-2">
+                        <div class="text-3xl text-emerald-400 mb-2"><i class="fa-solid fa-shield-halved animate-pulse"></i></div>
+                        <h2 class="text-lg md:text-xl font-black text-gray-200 uppercase tracking-wider mb-2">Zero-Trust Privacy Protocol</h2>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-5">Donor data is encrypted and hidden from open indexing to prevent harassment. Authenticate your donor profile to query active donors nearby.</p>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <button onclick="showPage('find-blood-page')" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-red-950 cursor-pointer transition-all"><i class="fa-solid fa-magnifying-glass mr-1"></i> Locate Donors</button>
+                            <button onclick="showPage('become-donor-page')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-emerald-950 cursor-pointer transition-all"><i class="fa-solid fa-user-plus mr-1"></i> Register as Donor</button>
                         </div>
                     </div>
                 </section>
-
             </main>
 
-            <!-- PAGE 1: FIND BLOOD PAGE -->
+            <!-- PAGE 1: EMERGENCY ALERT PAGE (SEPARATE PAGE) -->
+            <main id="emergencyAlertPage" class="container mx-auto px-4 pt-6 pb-12 max-w-xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-amber-500"></div>
+                    <h3 class="font-black text-lg text-red-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-bullhorn text-red-500 animate-pulse"></i> Dispatch Emergency Alert
+                    </h3>
+                    <p class="text-xs text-gray-400 mb-5 leading-relaxed">Fill out the urgent patient requirements below. Dispatched alerts will scroll live across the main header marquee ticker.</p>
+                    <div class="space-y-3.5 text-xs">
+                        <div>
+                            <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Patient Full Name</label>
+                            <input type="text" id="reqPatientName" placeholder="John Doe" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2.5 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Blood Group</label>
+                                <select id="reqBloodGroup" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2.5 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                                    <option value="">-- Group --</option>
+                                    <option value="A+">A+</option><option value="A-">A-</option>
+                                    <option value="B+">B+</option><option value="B-">B-</option>
+                                    <option value="O+">O+</option><option value="O-">O-</option>
+                                    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Hospital / City</label>
+                                <input type="text" id="reqHospital" placeholder="General Hospital" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2.5 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Emergency Contact Phone</label>
+                            <input type="tel" id="reqContact" placeholder="9876543210" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2.5 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                        </div>
+                        <button type="button" onclick="submitEmergencyRequest()" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-3 px-4 rounded-xl shadow-lg shadow-red-950 text-xs uppercase tracking-wider flex justify-center items-center gap-2 cursor-pointer transition-all mt-2">
+                            <i class="fa-solid fa-paper-plane"></i> Broadcast Alert to Ticker
+                        </button>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 2: DONOR METRICS PAGE (SEPARATE PAGE) -->
+            <main id="donorMetricsPage" class="container mx-auto px-4 pt-6 pb-12 max-w-4xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 via-amber-500 to-emerald-500"></div>
+                    <h2 class="text-2xl font-black uppercase tracking-wider text-3d-metallic mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-red-500"></i> Donor Network Metrics
+                    </h2>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                        <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border border-gray-800 relative overflow-hidden col-span-2 sm:col-span-1">
+                            <span class="text-[9px] font-black uppercase tracking-widest text-gray-400">Total Registered</span>
+                            <span id="statTotal" class="text-3xl font-black mt-1 text-3d-metallic">0</span>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl flex items-center justify-between border border-gray-800">
+                            <div>
+                                <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group A</span>
+                                <span id="statA" class="text-2xl font-black text-gray-200 mt-0.5">0</span>
+                            </div>
+                            <span class="bg-red-950 text-red-400 font-extrabold px-3 py-1.5 rounded-xl text-xs border border-red-800/50">A</span>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl flex items-center justify-between border border-gray-800">
+                            <div>
+                                <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group B</span>
+                                <span id="statB" class="text-2xl font-black text-gray-200 mt-0.5">0</span>
+                            </div>
+                            <span class="bg-red-950 text-red-400 font-extrabold px-3 py-1.5 rounded-xl text-xs border border-red-800/50">B</span>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl flex items-center justify-between border border-gray-800">
+                            <div>
+                                <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group O</span>
+                                <span id="statO" class="text-2xl font-black text-gray-200 mt-0.5">0</span>
+                            </div>
+                            <span class="bg-red-950 text-red-400 font-extrabold px-3 py-1.5 rounded-xl text-xs border border-red-800/50">O</span>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl flex items-center justify-between border border-gray-800">
+                            <div>
+                                <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group AB</span>
+                                <span id="statAB" class="text-2xl font-black text-gray-200 mt-0.5">0</span>
+                            </div>
+                            <span class="bg-red-950 text-red-400 font-extrabold px-3 py-1.5 rounded-xl text-xs border border-red-800/50">AB</span>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 3: FIND BLOOD PAGE (SEPARATE PAGE) -->
             <main id="findBloodPage" class="container mx-auto px-4 pt-6 pb-12 max-w-2xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
@@ -253,7 +285,6 @@
                         <h2 class="text-2xl font-black uppercase tracking-wider text-3d-metallic">Locate Donors</h2>
                     </div>
 
-                    <!-- Authentication Shield Box -->
                     <div id="searchAuthBox" class="bg-gray-900/90 p-5 border border-gray-800 rounded-2xl text-left shadow-inner">
                         <p class="text-xs text-gray-400 mb-4 leading-relaxed font-medium">
                             <i class="fa-solid fa-shield-halved text-red-500 mr-1"></i> <strong class="text-gray-200">Security Access Required:</strong> To protect registered donors from tele-spam, access is restricted to verified donors. Authenticate with your phone & password.
@@ -267,7 +298,6 @@
                         </div>
                     </div>
 
-                    <!-- Search Form Engine Box -->
                     <div id="searchFormBox" class="hidden space-y-5">
                         <p class="text-gray-400 text-xs leading-relaxed">Search donors via parameters: Blood Group, Pin Code, Area, or Geo-location Radius.</p>
                         
@@ -310,7 +340,6 @@
                     </div>
                 </section>
 
-                <!-- Search Results Grid Section -->
                 <section id="searchResultTableBox" class="hidden glass-card p-5 rounded-3xl overflow-hidden">
                     <h3 class="font-black text-xs text-gray-300 uppercase tracking-wider mb-4 flex items-center gap-2">
                         <i class="fa-solid fa-list-check text-red-500"></i> Query Results:
@@ -331,7 +360,7 @@
                 </section>
             </main>
 
-            <!-- PAGE 2: BECOME DONOR PAGE -->
+            <!-- PAGE 4: BECOME DONOR PAGE (SEPARATE PAGE) -->
             <main id="becomeDonorPage" class="container mx-auto px-4 pt-6 pb-12 max-w-2xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
@@ -416,7 +445,7 @@
                 </section>
             </main>
 
-            <!-- PAGE 3: MANAGE PROFILE PAGE -->
+            <!-- PAGE 5: MANAGE PROFILE PAGE (SEPARATE PAGE) -->
             <main id="manageProfilePage" class="container mx-auto px-4 pt-6 pb-12 max-w-2xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
@@ -429,7 +458,6 @@
                         <h2 class="text-2xl font-black uppercase tracking-wider text-3d-metallic">Profile Management</h2>
                     </div>
                     
-                    <!-- Auth Box -->
                     <div id="authManageBox" class="space-y-4 text-left py-2">
                         <p class="text-xs text-gray-400 text-center leading-relaxed">Enter registered phone number and password to authenticate.</p>
                         <div class="space-y-3 max-w-sm mx-auto">
@@ -447,7 +475,6 @@
                         </div>
                     </div>
 
-                    <!-- Profile Edit Box -->
                     <div id="profileEditFormBox" class="hidden space-y-5 mt-2">
                         <div class="bg-amber-950/30 p-4 rounded-2xl border border-amber-500/30 flex justify-between items-center">
                             <div>
@@ -523,50 +550,7 @@
                 </section>
             </main>
 
-            <!-- PAGE 4: SEPARATE EMERGENCY ALERT DISPATCH PAGE -->
-            <main id="emergencyAlertPage" class="container mx-auto px-4 pt-6 pb-12 max-w-xl hidden">
-                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
-                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
-                </button>
-
-                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden border border-gray-800">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-amber-500"></div>
-                    <h3 class="font-black text-lg text-red-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-bullhorn text-red-500 animate-pulse"></i> Dispatch Emergency Request
-                    </h3>
-                    <div class="space-y-3.5 text-xs">
-                        <div>
-                            <label class="block font-bold mb-1 text-gray-400">Patient Full Name *</label>
-                            <input type="text" id="reqPatientName" placeholder="Patient Name" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block font-bold mb-1 text-gray-400">Required Group *</label>
-                                <select id="reqBloodGroup" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                                    <option value="">-- Group --</option>
-                                    <option value="A+">A+</option><option value="A-">A-</option>
-                                    <option value="B+">B+</option><option value="B-">B-</option>
-                                    <option value="O+">O+</option><option value="O-">O-</option>
-                                    <option value="AB+">AB+</option><option value="AB-">AB-</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1 text-gray-400">Hospital / City *</label>
-                                <input type="text" id="reqHospital" placeholder="Hospital Name" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block font-bold mb-1 text-gray-400">Emergency Contact Number *</label>
-                            <input type="tel" id="reqContact" placeholder="Phone Number" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                        </div>
-                        <button type="button" onclick="submitEmergencyRequest()" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-3.5 px-4 rounded-xl shadow-lg shadow-red-950 text-xs uppercase tracking-wider flex justify-center items-center gap-2 cursor-pointer transition-all mt-4">
-                            <i class="fa-solid fa-paper-plane"></i> Broadcast Alert Now
-                        </button>
-                    </div>
-                </section>
-            </main>
-
-            <!-- PAGE 5: OFFICIAL HELPLINES PAGE -->
+            <!-- PAGE 6: OFFICIAL HELPLINES PAGE (SEPARATE PAGE) -->
             <main id="helplinePage" class="container mx-auto px-4 pt-6 pb-12 max-w-5xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
@@ -640,7 +624,7 @@
                 </section>
             </main>
 
-            <!-- PAGE 6: ABOUT & INSTRUCTIONS PAGE -->
+            <!-- PAGE 7: ABOUT & INSTRUCTIONS PAGE (SEPARATE PAGE) -->
             <main id="aboutPage" class="container mx-auto px-4 pt-6 pb-12 max-w-3xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
@@ -662,7 +646,7 @@
                             <ul class="space-y-2.5 text-xs font-medium text-gray-400 list-decimal list-inside">
                                 <li><strong class="text-gray-200">Register as Donor:</strong> Execute "Become Donor", provide bio-metrics & set an encrypted password.</li>
                                 <li><strong class="text-gray-200">Locate Donors:</strong> To enforce anti-spam protocols, login credentials are mandatory to execute search queries.</li>
-                                <li><strong class="text-gray-200">Emergency Alerts:</strong> Dispatch urgent requests from the dashboard to broadcast on the network live wall and active client push notifications.</li>
+                                <li><strong class="text-gray-200">Emergency Alerts:</strong> Dispatch urgent requests from the dashboard to broadcast on the network live header ticker.</li>
                                 <li><strong class="text-gray-200">Profile Management:</strong> Navigate to "Manage Profile" to toggle live status, alter location metrics, or terminate records.</li>
                             </ul>
                         </div>
@@ -713,69 +697,105 @@
         let currentUnlockedDonor = null;
         let isSearchAuthenticated = false; 
 
-        // REAL-TIME 3D HEARTBEAT CANVAS ANIMATION LOGO
-        function init3DHeartLogo() {
-            const canvas = document.getElementById('heartCanvas');
+        // SPLASH SCREEN 3D LOGO ANIMATION
+        function initSplash3DLogo() {
+            const canvas = document.getElementById('splash3dCanvas');
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
-            let pulse = 0;
+            let angle = 0;
 
-            function drawHeart(x, y, size) {
-                ctx.beginPath();
-                ctx.moveTo(x, y + size / 4);
-                ctx.quadraticCurveTo(x, y, x - size / 2, y);
-                ctx.quadraticCurveTo(x - size, y, x - size, y + size / 2);
-                ctx.quadraticCurveTo(x - size, y + size, x, y + size * 1.3);
-                ctx.quadraticCurveTo(x + size, y + size, x + size, y + size / 2);
-                ctx.quadraticCurveTo(x + size, y, x + size / 2, y);
-                ctx.quadraticCurveTo(x, y, x, y + size / 4);
-                ctx.fill();
-            }
-
-            function render() {
-                ctx.clearRect(0, 0, 48, 48);
+            function renderSplash() {
+                ctx.clearRect(0, 0, 120, 120);
                 
-                // Dark Cyber Card Canvas Background
-                let bgGrd = ctx.createLinearGradient(0, 0, 48, 48);
+                ctx.save();
+                ctx.translate(60, 60);
+                ctx.rotate(angle);
+                
+                // Outer Cyber Ring
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(0, 0, 48, 0, Math.PI * 1.5);
+                ctx.stroke();
+
+                // Inner Tech Ring
+                ctx.strokeStyle = '#f87171';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.arc(0, 0, 32, Math.PI, Math.PI * 2.5);
+                ctx.stroke();
+                ctx.restore();
+
+                // Core Glowing Blood Drop Symbol
+                ctx.fillStyle = '#dc2626';
+                ctx.beginPath();
+                ctx.arc(60, 60, 16, 0, Math.PI * 2);
+                ctx.fill();
+
+                angle += 0.05;
+                if(document.getElementById('splashScreen').style.display !== 'none') {
+                    requestAnimationFrame(renderSplash);
+                }
+            }
+            renderSplash();
+
+            // Dismiss splash screen after 1.8 seconds
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                const appBody = document.getElementById('appBody');
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    appBody.classList.remove('opacity-0');
+                }, 700);
+            }, 1800);
+        }
+        initSplash3DLogo();
+
+        // 3D HEADER CANVAS LOGO
+        function initHeader3DLogo() {
+            const canvas = document.getElementById('logo3dCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let angle = 0;
+
+            function renderHeaderLogo() {
+                ctx.clearRect(0, 0, 44, 44);
+                
+                let bgGrd = ctx.createLinearGradient(0, 0, 44, 44);
                 bgGrd.addColorStop(0, '#111827');
                 bgGrd.addColorStop(1, '#030712');
                 ctx.fillStyle = bgGrd;
-                ctx.fillRect(0, 0, 48, 48);
-
-                // Heartbeat Scale Math Logic
-                let scale = 1 + Math.sin(pulse) * 0.12;
-                pulse += 0.08;
+                ctx.fillRect(0, 0, 44, 44);
 
                 ctx.save();
-                ctx.translate(24, 18);
-                ctx.scale(scale, scale);
-
-                // Crimson Heart Glow Background
-                let heartGrd = ctx.createRadialGradient(0, 0, 2, 0, 0, 14);
-                heartGrd.addColorStop(0, '#f87171');
-                heartGrd.addColorStop(0.7, '#ef4444');
-                heartGrd.addColorStop(1, '#991b1b');
+                ctx.translate(22, 22);
+                ctx.rotate(angle);
                 
-                ctx.fillStyle = heartGrd;
-                drawHeart(0, -4, 9);
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.arc(0, 0, 15, 0, Math.PI * 1.5);
+                ctx.stroke();
 
+                ctx.strokeStyle = '#f87171';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.arc(0, 0, 9, Math.PI, Math.PI * 2.5);
+                ctx.stroke();
                 ctx.restore();
 
-                requestAnimationFrame(render);
-            }
-            render();
-        }
-        init3DHeartLogo();
+                ctx.fillStyle = '#dc2626';
+                ctx.beginPath();
+                ctx.arc(22, 22, 5, 0, Math.PI * 2);
+                ctx.fill();
 
-        // TOGGLE SIDE MENU (3-DOTS)
-        window.toggleSideMenu = function() {
-            const menu = document.getElementById('sideMenuOverlay');
-            if(menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-            } else {
-                menu.classList.add('hidden');
+                angle += 0.04;
+                requestAnimationFrame(renderHeaderLogo);
             }
-        };
+            renderHeaderLogo();
+        }
+        initHeader3DLogo();
 
         function requestNotificationPermission() {
             if ("Notification" in window) {
@@ -874,9 +894,9 @@
             );
         };
 
-        // FULL PAGE ROUTING NAVIGATION LOGIC
+        // NAVIGATION LOGIC FOR SEPARATE FULL PAGES
         window.showPage = function(pageId) {
-            const pages = ['findBloodPage', 'becomeDonorPage', 'manageProfilePage', 'aboutPage', 'helplinePage', 'emergencyAlertPage', 'mainTablePage'];
+            const pages = ['findBloodPage', 'becomeDonorPage', 'manageProfilePage', 'aboutPage', 'helplinePage', 'emergencyAlertPage', 'donorMetricsPage', 'mainTablePage'];
             pages.forEach(p => {
                 const el = document.getElementById(p);
                 if(el) el.classList.add('hidden');
@@ -884,6 +904,12 @@
 
             if(pageId === 'home') {
                 document.getElementById('mainTablePage').classList.remove('hidden');
+            }
+            else if(pageId === 'emergencyAlertPage') {
+                document.getElementById('emergencyAlertPage').classList.remove('hidden');
+            }
+            else if(pageId === 'donorMetricsPage') {
+                document.getElementById('donorMetricsPage').classList.remove('hidden');
             }
             else if(pageId === 'find-blood-page') {
                 document.getElementById('findBloodPage').classList.remove('hidden');
@@ -904,9 +930,6 @@
             }
             else if(pageId === 'helplinePage') {
                 document.getElementById('helplinePage').classList.remove('hidden');
-            }
-            else if(pageId === 'emergencyAlertPage') {
-                document.getElementById('emergencyAlertPage').classList.remove('hidden');
             }
             window.scrollTo({top: 0, behavior: 'smooth'});
         };
@@ -1139,14 +1162,12 @@
             const canvas = document.getElementById('hiddenProfileCanvas');
             const ctx = canvas.getContext('2d');
             
-            // Cyber Gradient Background
             const grd = ctx.createLinearGradient(0, 0, 600, 400);
             grd.addColorStop(0, '#0f172a');
             grd.addColorStop(1, '#020617');
             ctx.fillStyle = grd;
             ctx.fillRect(0, 0, 600, 400);
             
-            // Inner Card
             ctx.fillStyle = '#1e293b';
             ctx.fillRect(20, 20, 560, 360);
             
@@ -1275,16 +1296,16 @@
             }
         };
 
-        // FEEDS EMERGENCY ALERTS DIRECTLY TO SCROLLING MARQUEE TICKER
+        // STREAM EMERGENCY REQUESTS DIRECTLY TO MARQUEE TICKER
         function listenToEmergencyRequests() {
-            const marquee = document.getElementById('alertMarquee');
-            const q = query(collection(db, "emergency_requests"), orderBy("timestamp", "desc"), limit(10));
+            const marquee = document.getElementById('dynamicAlertMarquee');
+            const q = query(collection(db, "emergency_requests"), orderBy("timestamp", "desc"), limit(5));
             
             let isFirstLoad = true;
 
             onSnapshot(q, (snapshot) => {
                 if (snapshot.empty) {
-                    marquee.innerHTML = "Donate Blood — Save Human Lives. Your minimal effort restores hope in life. Join our decentralized community blood grid.";
+                    marquee.innerHTML = `Donate Blood — Save Human Lives. Join our decentralized community blood grid.`;
                     isFirstLoad = false;
                     return;
                 }
@@ -1303,13 +1324,13 @@
                         });
                     }
 
-                    alertStrings.push(`🚨 [URGENT ${data.blood_group}] Patient: ${data.patient_name} @ ${data.hospital} — Contact: ${data.contact}`);
+                    alertStrings.push(`🚨 [URGENT: ${data.blood_group}] Patient ${data.patient_name} needs blood at ${data.hospital} | Contact: ${data.contact}`);
                 });
 
-                marquee.innerHTML = alertStrings.join(" &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp; ");
+                marquee.innerHTML = alertStrings.join(' &nbsp;&nbsp;&nbsp;•••&nbsp;&nbsp;&nbsp; ');
                 isFirstLoad = false;
             }, (error) => {
-                console.error("Live requests ticker error: ", error);
+                console.error("Marquee stream error: ", error);
             });
         }
 
@@ -1354,4 +1375,4 @@
         setTimeout(initApp, 500);
     </script>
 </body>
-                                        </html>
+    </html>
