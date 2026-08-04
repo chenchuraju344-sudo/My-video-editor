@@ -61,28 +61,27 @@
     <div id="appBody" class="opacity-0 transition-opacity duration-500">
         <!-- TOP NAVIGATION BAR -->
         <header class="sticky top-0 z-50 bg-gray-950/80 backdrop-blur-xl border-b border-gray-800/80 shadow-2xl">
-            <div class="container mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="container mx-auto px-4 py-3 flex flex-row justify-between items-center gap-3">
                 <div class="flex items-center gap-3 cursor-pointer select-none" onclick="showPage('home')">
-                    <!-- NEW 3D ANIMATED LOGO CANVAS -->
                     <canvas id="logo3dCanvas" width="44" height="44" class="rounded-xl shadow-lg shadow-red-900/40"></canvas>
                     <div>
                         <h1 class="text-xl md:text-2xl font-black tracking-wider uppercase flex items-center gap-1">
                             <span class="text-3d-metallic">DoBlood</span><span class="text-red-500 text-3d-glow">.online</span>
                         </h1>
-                        <p class="text-[9px] uppercase tracking-widest text-gray-400 font-bold">Autonomous Local Blood Line</p>
+                        <p class="text-[9px] uppercase tracking-widest text-gray-400 font-bold hidden sm:block">Autonomous Local Blood Line</p>
                     </div>
                 </div>
                 
-                <div class="flex items-center gap-2">
-                    <button onclick="showPage('home')" class="text-xs font-bold text-gray-300 hover:text-white bg-gray-900 border border-gray-800 px-3 py-1.5 rounded-xl transition-all cursor-pointer">
-                        <i class="fa-solid fa-house text-red-500 mr-1"></i> Home
+                <!-- CLEAN TOP NAVIGATION DROPDOWN MENU -->
+                <div class="relative inline-block text-left">
+                    <button onclick="toggleNavMenu()" class="text-xs font-bold text-gray-200 bg-gray-900 hover:bg-gray-800 border border-gray-800 px-3.5 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-house text-red-500"></i> Menu <i class="fa-solid fa-chevron-down text-[10px] text-gray-400"></i>
                     </button>
-                    <button onclick="showPage('manage-profile-page')" class="text-xs font-bold text-amber-400 hover:text-amber-300 bg-amber-950/40 border border-amber-800/50 px-3 py-1.5 rounded-xl transition-all cursor-pointer">
-                        <i class="fa-solid fa-user-gear mr-1"></i> Profile
-                    </button>
-                    <button onclick="showPage('aboutPage')" class="text-xs font-bold text-blue-400 hover:text-blue-300 bg-blue-950/40 border border-blue-800/50 px-3 py-1.5 rounded-xl transition-all cursor-pointer">
-                        <i class="fa-solid fa-circle-info mr-1"></i> About & Guide
-                    </button>
+                    <div id="navMenuDropdown" class="hidden absolute right-0 mt-2 w-48 rounded-2xl glass-card border border-gray-800 shadow-2xl py-2 z-50">
+                        <a href="javascript:void(0)" onclick="showPage('home'); toggleNavMenu();" class="block px-4 py-2.5 text-xs font-bold text-gray-300 hover:bg-gray-800/80 hover:text-white flex items-center gap-2"><i class="fa-solid fa-gauge-high text-red-500"></i> Dashboard</a>
+                        <a href="javascript:void(0)" onclick="showPage('manage-profile-page'); toggleNavMenu();" class="block px-4 py-2.5 text-xs font-bold text-amber-400 hover:bg-gray-800/80 flex items-center gap-2"><i class="fa-solid fa-user-gear"></i> Manage Profile</a>
+                        <a href="javascript:void(0)" onclick="showPage('aboutPage'); toggleNavMenu();" class="block px-4 py-2.5 text-xs font-bold text-blue-400 hover:bg-gray-800/80 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> About & Guidelines</a>
+                    </div>
                 </div>
             </div>
         </header>
@@ -115,7 +114,6 @@
 
             <!-- PAGE 0: MAIN HOME DASHBOARD PAGE -->
             <main id="mainTablePage" class="container mx-auto px-4 pt-4 pb-12 max-w-6xl">
-                <!-- MAIN ACTION CARDS -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                     <button onclick="showPage('find-blood-page')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
                         <div class="bg-gray-800/80 text-red-500 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
@@ -150,7 +148,6 @@
                     </button>
                 </div>
 
-                <!-- DONOR METRICS BUTTON AND SUMMARY BAR -->
                 <button onclick="showPage('donorMetricsPage')" class="w-full glass-card p-4 rounded-2xl mb-8 flex items-center justify-between border border-gray-800 hover:border-red-500/50 transition-all cursor-pointer group">
                     <div class="flex items-center gap-3">
                         <div class="bg-red-950 text-red-400 p-2.5 rounded-xl border border-red-800/50 group-hover:scale-110 transition-all">
@@ -164,7 +161,6 @@
                     <i class="fa-solid fa-chevron-right text-gray-500 group-hover:text-white transition-all"></i>
                 </button>
 
-                <!-- PRIVACY BANNER -->
                 <section class="glass-card p-6 md:p-8 rounded-3xl text-center relative overflow-hidden border border-gray-800">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
                     <div class="max-w-xl mx-auto py-2">
@@ -179,18 +175,18 @@
                 </section>
             </main>
 
-            <!-- PAGE 1: EMERGENCY ALERT PAGE (SEPARATE PAGE) -->
+            <!-- PAGE 1: EMERGENCY ALERT & DELETE OPTION PAGE -->
             <main id="emergencyAlertPage" class="container mx-auto px-4 pt-6 pb-12 max-w-xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
                 </button>
 
-                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden mb-6">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-amber-500"></div>
                     <h3 class="font-black text-lg text-red-400 uppercase tracking-wider mb-4 flex items-center gap-2">
                         <i class="fa-solid fa-bullhorn text-red-500 animate-pulse"></i> Dispatch Emergency Alert
                     </h3>
-                    <p class="text-xs text-gray-400 mb-5 leading-relaxed">Fill out the urgent patient requirements below. Dispatched alerts will scroll live across the main header marquee ticker.</p>
+                    <p class="text-xs text-gray-400 mb-5 leading-relaxed">Fill out urgent patient requirements below. Dispatched alerts will scroll live across the main marquee ticker.</p>
                     <div class="space-y-3.5 text-xs">
                         <div>
                             <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Patient Full Name</label>
@@ -221,9 +217,23 @@
                         </button>
                     </div>
                 </section>
+
+                <!-- DELETE EMERGENCY ALERT SECTION -->
+                <section class="glass-card p-5 rounded-3xl border border-gray-800">
+                    <h4 class="font-black text-xs text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-emerald-400"></i> Found Blood? Delete Your Alert
+                    </h4>
+                    <p class="text-[11px] text-gray-400 mb-3">If your request is fulfilled, enter the registered contact number to clear the alert.</p>
+                    <div class="flex gap-2">
+                        <input type="tel" id="deleteAlertPhone" placeholder="Enter Contact Number" class="flex-1 bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-gray-200 font-semibold focus:border-amber-500 focus:outline-none">
+                        <button type="button" onclick="deleteEmergencyAlert()" class="bg-gray-800 hover:bg-gray-700 text-rose-400 border border-gray-700 font-bold px-4 py-2 rounded-xl text-xs cursor-pointer shrink-0">
+                            Delete Alert
+                        </button>
+                    </div>
+                </section>
             </main>
 
-            <!-- PAGE 2: DONOR METRICS PAGE (SEPARATE PAGE) -->
+            <!-- PAGE 2: DONOR METRICS PAGE -->
             <main id="donorMetricsPage" class="container mx-auto px-4 pt-6 pb-12 max-w-4xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
@@ -272,7 +282,7 @@
                 </section>
             </main>
 
-            <!-- PAGE 3: FIND BLOOD PAGE (SEPARATE PAGE) -->
+            <!-- PAGE 3: FIND BLOOD PAGE -->
             <main id="findBloodPage" class="container mx-auto px-4 pt-6 pb-12 max-w-2xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
@@ -360,7 +370,7 @@
                 </section>
             </main>
 
-            <!-- PAGE 4: BECOME DONOR PAGE (SEPARATE PAGE) -->
+            <!-- PAGE 4: BECOME DONOR PAGE -->
             <main id="becomeDonorPage" class="container mx-auto px-4 pt-6 pb-12 max-w-2xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
@@ -445,7 +455,7 @@
                 </section>
             </main>
 
-            <!-- PAGE 5: MANAGE PROFILE PAGE (SEPARATE PAGE) -->
+            <!-- PAGE 5: MANAGE PROFILE & FORGOT PASSWORD PAGE -->
             <main id="manageProfilePage" class="container mx-auto px-4 pt-6 pb-12 max-w-2xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
@@ -466,12 +476,27 @@
                                 <input type="tel" id="loginPhone" placeholder="9876543210" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-amber-500 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Password</label>
+                                <div class="flex justify-between items-center mb-1">
+                                    <label class="block font-bold text-[11px] text-gray-400 uppercase tracking-wider">Password</label>
+                                    <button type="button" onclick="showForgotPasswordModal()" class="text-[10px] font-bold text-amber-400 hover:underline">Forgot Password?</button>
+                                </div>
                                 <input type="password" id="loginPassword" placeholder="******" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-amber-500 focus:outline-none">
                             </div>
                             <button type="button" onclick="loginWithPassword()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-black py-3 px-5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-amber-950 transition-all">
                                 <i class="fa-solid fa-lock-open"></i> Authorize & Edit
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- FORGOT PASSWORD RESET BOX -->
+                    <div id="forgotPasswordBox" class="hidden space-y-4 text-left py-2 max-w-sm mx-auto border-t border-gray-800 pt-4">
+                        <h4 class="text-xs font-black text-amber-400 uppercase tracking-wider text-center">Reset Profile Password</h4>
+                        <input type="tel" id="resetPhone" placeholder="Registered Mobile Number" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
+                        <input type="email" id="resetEmail" placeholder="Registered Email ID" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
+                        <input type="password" id="resetNewPassword" placeholder="Enter New Password" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
+                        <div class="flex gap-2">
+                            <button type="button" onclick="resetDonorPassword()" class="flex-1 bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded-xl text-xs">Update Password</button>
+                            <button type="button" onclick="hideForgotPasswordModal()" class="bg-gray-800 text-gray-400 px-3 py-2 rounded-xl text-xs">Cancel</button>
                         </div>
                     </div>
 
@@ -550,7 +575,7 @@
                 </section>
             </main>
 
-            <!-- PAGE 6: OFFICIAL HELPLINES PAGE (SEPARATE PAGE) -->
+            <!-- PAGE 6: OFFICIAL HELPLINES PAGE -->
             <main id="helplinePage" class="container mx-auto px-4 pt-6 pb-12 max-w-5xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
@@ -624,7 +649,7 @@
                 </section>
             </main>
 
-            <!-- PAGE 7: ABOUT & INSTRUCTIONS PAGE (SEPARATE PAGE) -->
+            <!-- PAGE 7: ABOUT & INSTRUCTIONS PAGE -->
             <main id="aboutPage" class="container mx-auto px-4 pt-6 pb-12 max-w-3xl hidden">
                 <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
@@ -697,6 +722,12 @@
         let currentUnlockedDonor = null;
         let isSearchAuthenticated = false; 
 
+        // TOP NAVIGATION MENU TOGGLE
+        window.toggleNavMenu = function() {
+            const menu = document.getElementById('navMenuDropdown');
+            menu.classList.toggle('hidden');
+        };
+
         // SPLASH SCREEN 3D LOGO ANIMATION
         function initSplash3DLogo() {
             const canvas = document.getElementById('splash3dCanvas');
@@ -711,14 +742,12 @@
                 ctx.translate(60, 60);
                 ctx.rotate(angle);
                 
-                // Outer Cyber Ring
                 ctx.strokeStyle = '#ef4444';
                 ctx.lineWidth = 4;
                 ctx.beginPath();
                 ctx.arc(0, 0, 48, 0, Math.PI * 1.5);
                 ctx.stroke();
 
-                // Inner Tech Ring
                 ctx.strokeStyle = '#f87171';
                 ctx.lineWidth = 2.5;
                 ctx.beginPath();
@@ -726,7 +755,6 @@
                 ctx.stroke();
                 ctx.restore();
 
-                // Core Glowing Blood Drop Symbol
                 ctx.fillStyle = '#dc2626';
                 ctx.beginPath();
                 ctx.arc(60, 60, 16, 0, Math.PI * 2);
@@ -739,7 +767,6 @@
             }
             renderSplash();
 
-            // Dismiss splash screen after 1.8 seconds
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
                 const appBody = document.getElementById('appBody');
@@ -894,7 +921,7 @@
             );
         };
 
-        // NAVIGATION LOGIC FOR SEPARATE FULL PAGES
+        // PAGE NAVIGATION LOGIC
         window.showPage = function(pageId) {
             const pages = ['findBloodPage', 'becomeDonorPage', 'manageProfilePage', 'aboutPage', 'helplinePage', 'emergencyAlertPage', 'donorMetricsPage', 'mainTablePage'];
             pages.forEach(p => {
@@ -949,6 +976,44 @@
             }
             t.innerText = title; msg.innerText = message; box.classList.remove('hidden');
             setTimeout(() => { box.classList.add('hidden'); }, 6000);
+        };
+
+        // FORGOT PASSWORD MODAL TOGGLES & RESET
+        window.showForgotPasswordModal = function() {
+            document.getElementById('forgotPasswordBox').classList.remove('hidden');
+        };
+
+        window.hideForgotPasswordModal = function() {
+            document.getElementById('forgotPasswordBox').classList.add('hidden');
+        };
+
+        window.resetDonorPassword = async function() {
+            const phone = document.getElementById('resetPhone').value.trim();
+            const email = document.getElementById('resetEmail').value.trim();
+            const newPassword = document.getElementById('resetNewPassword').value.trim();
+
+            if(!phone || !email || !newPassword) {
+                alert("⚠️ Please fill phone number, email and new password!");
+                return;
+            }
+
+            try {
+                const q = query(collection(db, "donors"), where("phone", "==", phone), where("email", "==", email), limit(1));
+                const snap = await getDocs(q);
+
+                if(snap.empty) {
+                    alert("❌ Verification failed! Phone number and Email do not match.");
+                    return;
+                }
+
+                const docId = snap.docs[0].id;
+                await updateDoc(doc(db, "donors", docId), { password: newPassword });
+
+                alert("🎉 Password reset successfully! Please login with your new password.");
+                hideForgotPasswordModal();
+            } catch(e) {
+                alert("Reset error: " + e.message);
+            }
         };
 
         window.loginWithPassword = async function() {
@@ -1293,6 +1358,35 @@
                 showPage('home');
             } catch (error) {
                 alert("Error: " + error.message);
+            }
+        };
+
+        // DELETE EMERGENCY ALERT
+        window.deleteEmergencyAlert = async function() {
+            const phone = document.getElementById('deleteAlertPhone').value.trim();
+            if(!phone) {
+                alert("⚠️ Please enter contact number used during alert creation!");
+                return;
+            }
+
+            try {
+                const q = query(collection(db, "emergency_requests"), where("contact", "==", phone));
+                const snap = await getDocs(q);
+
+                if(snap.empty) {
+                    alert("❌ No active emergency alerts found matching this contact number!");
+                    return;
+                }
+
+                snap.forEach(async (d) => {
+                    await deleteDoc(doc(db, "emergency_requests", d.id));
+                });
+
+                alert("🗑️ Emergency Alert deleted successfully!");
+                document.getElementById('deleteAlertPhone').value = '';
+                showPage('home');
+            } catch(e) {
+                alert("Delete error: " + e.message);
             }
         };
 
