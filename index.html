@@ -51,570 +51,598 @@
         ::-webkit-scrollbar-thumb:hover { background: #ef4444; }
     </style>
 </head>
-<body class="cyber-grid min-h-screen antialiased selection:bg-red-600 selection:text-white">
+<body class="cyber-grid min-h-screen antialiased selection:bg-red-600 selection:text-white flex flex-col justify-between">
 
-    <!-- TOP NAVIGATION BAR -->
-    <header class="sticky top-0 z-50 bg-gray-950/80 backdrop-blur-xl border-b border-gray-800/80 shadow-2xl">
-        <div class="container mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div class="flex items-center gap-3 cursor-pointer select-none" onclick="showPage('home')">
-                <!-- 3D Interactive Animated Logo Canvas -->
-                <canvas id="logo3dCanvas" width="48" height="48" class="rounded-xl shadow-lg shadow-red-900/30"></canvas>
-                <div>
-                    <h1 class="text-xl md:text-2xl font-black tracking-wider uppercase flex items-center gap-1">
-                        <span class="text-3d-metallic">DoBlood</span><span class="text-red-500 text-3d-glow">.online</span>
-                    </h1>
-                    <p class="text-[9px] uppercase tracking-widest text-gray-400 font-bold">Autonomous Local Blood Line</p>
+    <div>
+        <!-- TOP NAVIGATION BAR -->
+        <header class="sticky top-0 z-50 bg-gray-950/80 backdrop-blur-xl border-b border-gray-800/80 shadow-2xl">
+            <div class="container mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+                <div class="flex items-center gap-3 cursor-pointer select-none" onclick="showPage('home')">
+                    <!-- 3D Interactive Animated Logo Canvas -->
+                    <canvas id="logo3dCanvas" width="48" height="48" class="rounded-xl shadow-lg shadow-red-900/30"></canvas>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-black tracking-wider uppercase flex items-center gap-1">
+                            <span class="text-3d-metallic">DoBlood</span><span class="text-red-500 text-3d-glow">.online</span>
+                        </h1>
+                        <p class="text-[9px] uppercase tracking-widest text-gray-400 font-bold">Autonomous Local Blood Line</p>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="flex items-center gap-3">
-                <span class="text-xs font-black bg-red-950/80 border border-red-500/40 text-red-400 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-inner">
-                    <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span> SAVE LIVES
-                </span>
-                <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider hidden md:block">
-                    <i class="fa-solid fa-lock text-red-500 mr-1"></i> End-to-End Encrypted Data
-                </p>
-            </div>
-        </div>
-    </header>
-
-    <!-- LIVE TICKER MARQUEE -->
-    <div class="bg-gray-900/90 border-b border-gray-800/60 py-2.5 overflow-hidden backdrop-blur-md">
-        <div class="container mx-auto px-4 flex items-center gap-3">
-            <span class="bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-md uppercase tracking-widest shrink-0 shadow-lg shadow-red-900/40 flex items-center gap-1">
-                <i class="fa-solid fa-bolt text-amber-300"></i> ALERT:
-            </span>
-            <marquee class="text-xs font-bold text-gray-300 tracking-wide" scrollamount="5">
-                Donate Blood — Save Human Lives. Your minimal effort restores hope in life. Join our decentralized community blood grid.
-            </marquee>
-        </div>
-    </div>
-
-    <!-- MAIN DASHBOARD QUICK ACTIONS -->
-    <div class="container mx-auto px-4 pt-8 max-w-6xl">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <button onclick="showPage('find-blood-page')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
-                <div class="bg-gray-800/80 text-red-500 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
-                    <i class="fa-solid fa-magnifying-glass-location"></i>
-                </div>
-                <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Find Donors</span>
-                <span class="text-[9px] text-gray-400 font-medium mt-0.5">Search Network</span>
-            </button>
-
-            <button onclick="showPage('become-donor-page')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
-                <div class="bg-gray-800/80 text-emerald-400 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
-                    <i class="fa-solid fa-heart-pulse"></i>
-                </div>
-                <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Become Donor</span>
-                <span class="text-[9px] text-gray-400 font-medium mt-0.5">Join Registry</span>
-            </button>
-
-            <button onclick="showPage('manage-profile-page')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
-                <div class="bg-gray-800/80 text-amber-400 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-amber-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
-                    <i class="fa-solid fa-user-gear"></i>
-                </div>
-                <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Manage Profile</span>
-                <span class="text-[9px] text-gray-400 font-medium mt-0.5">Edit Credentials</span>
-            </button>
-
-            <button onclick="showPage('helplinePage')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
-                <div class="bg-gray-800/80 text-cyan-400 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-cyan-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
-                    <i class="fa-solid fa-hospital-user"></i>
-                </div>
-                <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Blood Banks</span>
-                <span class="text-[9px] text-gray-400 font-medium mt-0.5">Helpline Hubs</span>
-            </button>
-
-            <button onclick="showPage('aboutPage')" class="glass-card p-3 rounded-2xl flex items-center justify-center gap-2 transition-all hover:bg-gray-800/90 col-span-2 md:col-span-4 mt-1 cursor-pointer border border-gray-800">
-                <i class="fa-solid fa-circle-info text-blue-400"></i>
-                <span class="text-xs font-bold text-gray-300 uppercase tracking-wider">About Platform & Operational Protocols</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- GLOBAL NOTIFICATION BANNER -->
-    <div class="container mx-auto px-4 max-w-6xl">
-        <div id="globalNotification" class="hidden mb-6 p-4 rounded-2xl border flex items-start gap-3 shadow-2xl transition-all">
-            <div id="notiIcon" class="text-xl mt-0.5"></div>
-            <div>
-                <h4 id="notiTitle" class="font-bold text-sm tracking-wide uppercase"></h4>
-                <p id="notiMessage" class="text-xs mt-0.5 leading-relaxed opacity-90"></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- PAGE 1: FIND BLOOD PAGE -->
-    <main id="findBloodPage" class="container mx-auto px-4 pb-12 max-w-xl hidden">
-        <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 via-rose-500 to-amber-500"></div>
-            <div class="flex items-center gap-3 mb-6">
-                <i class="fa-solid fa-satellite-dish text-red-500 text-2xl"></i>
-                <h2 class="text-2xl font-black uppercase tracking-wider text-3d-metallic">Locate Donors</h2>
-            </div>
-
-            <!-- Authentication Shield Box -->
-            <div id="searchAuthBox" class="bg-gray-900/90 p-5 border border-gray-800 rounded-2xl text-left shadow-inner">
-                <p class="text-xs text-gray-400 mb-4 leading-relaxed font-medium">
-                    <i class="fa-solid fa-shield-halved text-red-500 mr-1"></i> <strong class="text-gray-200">Security Access Required:</strong> To protect registered donors from tele-spam, access is restricted to verified donors. Authenticate with your phone & password.
-                </p>
-                <div class="space-y-3 max-w-xs mx-auto">
-                    <input type="tel" id="searchLoginPhone" placeholder="Mobile Number" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                    <input type="password" id="searchLoginPassword" placeholder="Password" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                    <button type="button" onclick="verifyDonorForSearch()" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-wider flex justify-center items-center gap-2 transition-all cursor-pointer shadow-lg shadow-red-950">
-                        <i class="fa-solid fa-lock-open"></i> Unlock Search Engine
+                
+                <div class="flex items-center gap-3">
+                    <button onclick="showPage('home')" class="text-xs font-bold text-gray-300 hover:text-white bg-gray-900 border border-gray-800 px-3 py-1.5 rounded-xl transition-all cursor-pointer">
+                        <i class="fa-solid fa-house text-red-500 mr-1"></i> Home
                     </button>
-                </div>
-            </div>
-
-            <!-- Search Form Engine Box -->
-            <div id="searchFormBox" class="hidden space-y-5">
-                <p class="text-gray-400 text-xs leading-relaxed">Search donors via parameters: Blood Group, Pin Code, Area, or Geo-location Radius.</p>
-                
-                <div>
-                    <label class="block font-bold mb-1.5 text-xs text-gray-300 uppercase tracking-wider">Target Blood Group</label>
-                    <select id="searchBlood" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-xs text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                        <option value="">-- Select Group --</option>
-                        <option value="A+">A+</option><option value="A-">A-</option>
-                        <option value="B+">B+</option><option value="B-">B-</option>
-                        <option value="O+">O+</option><option value="O-">O-</option>
-                        <option value="AB+">AB+</option><option value="AB-">AB-</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block font-bold mb-1.5 text-xs text-gray-300 uppercase tracking-wider">Sub-District / Area / Pincode</label>
-                    <input id="searchArea" type="text" placeholder="e.g., Khammam or 507001" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-xs text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                </div>
-                
-                <div class="border-t border-dashed border-gray-800 pt-4">
-                    <label class="block font-bold mb-1.5 text-xs text-gray-300 uppercase tracking-wider">📍 Live Radius Range Search</label>
-                    <div class="flex flex-col sm:flex-row gap-2">
-                        <select id="searchRadius" class="flex-1 bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                            <option value="">-- Select Distance Radius --</option>
-                            <option value="5">Within 5 KM Radius</option>
-                            <option value="10">Within 10 KM Radius</option>
-                            <option value="20">Within 20 KM Radius</option>
-                        </select>
-                        <button type="button" onclick="getLiveLocationForSearch()" class="bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold px-4 py-2.5 border border-gray-700 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer">
-                            <i class="fa-solid fa-location-crosshairs text-red-500"></i> Geo-Tag
-                        </button>
-                    </div>
-                    <p id="locationSearchStatus" class="text-[10px] text-gray-500 mt-1 font-medium"></p>
-                    <input type="hidden" id="searchLat"><input type="hidden" id="searchLng">
-                </div>
-
-                <button type="button" onclick="searchDonorsData()" class="w-full bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black py-3.5 px-4 rounded-xl shadow-xl shadow-red-950 uppercase tracking-wider text-xs flex justify-center items-center gap-2 cursor-pointer transition-all">
-                    <i class="fa-solid fa-bolt"></i> Execute Donor Query
-                </button>
-            </div>
-        </section>
-
-        <!-- Search Results Grid Section -->
-        <section id="searchResultTableBox" class="hidden glass-card p-5 rounded-3xl mt-6 overflow-hidden">
-            <h3 class="font-black text-xs text-gray-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-list-check text-red-500"></i> Query Query Results:
-            </h3>
-            <div class="overflow-x-auto rounded-xl border border-gray-800 bg-gray-950">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-gray-900 text-gray-400 text-[10px] font-black uppercase tracking-wider border-b border-gray-800">
-                            <th class="p-3">Identity</th>
-                            <th class="p-3">Group</th>
-                            <th class="p-3">Locality</th>
-                            <th class="p-3 text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="searchResultsTbody" class="divide-y divide-gray-800/60 text-xs text-gray-300"></tbody>
-                </table>
-            </div>
-        </section>
-    </main>
-
-    <!-- PAGE 2: BECOME DONOR PAGE -->
-    <main id="becomeDonorPage" class="container mx-auto px-4 pb-12 max-w-xl hidden">
-        <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500"></div>
-            <div class="flex items-center gap-3 mb-6">
-                <i class="fa-solid fa-id-card text-emerald-400 text-2xl"></i>
-                <h2 class="text-2xl font-black uppercase tracking-wider text-3d-metallic">Donor Registration</h2>
-            </div>
-            
-            <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-3.5 mb-5 text-emerald-300 text-xs flex items-start gap-2.5">
-                <i class="fa-solid fa-shield-halved text-emerald-400 text-base mt-0.5"></i>
-                <div>
-                    <span class="font-bold">Encrypted Registration:</span> Submit details & create a secret password. Use credentials to manage availability or search network.
-                </div>
-            </div>
-            
-            <div class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Full Legal Name *</label>
-                        <input type="text" id="donorName" placeholder="John Doe" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Mobile Phone *</label>
-                        <input type="tel" id="donorPhone" placeholder="9876543210" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Email Address *</label>
-                        <input type="email" id="donorEmail" placeholder="name@domain.com" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Access Password *</label>
-                        <input type="password" id="donorPassword" placeholder="******" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Blood Group *</label>
-                        <select id="donorBlood" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
-                            <option value="">-- Select Group --</option>
-                            <option value="A+">A+</option><option value="A-">A-</option>
-                            <option value="B+">B+</option><option value="B-">B-</option>
-                            <option value="O+">O+</option><option value="O-">O-</option>
-                            <option value="AB+">AB+</option><option value="AB-">AB-</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Age (Years) *</label>
-                        <input type="number" id="donorAge" placeholder="25" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Area / Sub-District *</label>
-                        <input type="text" id="donorArea" placeholder="Village / Street / Town" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Postal Pin Code *</label>
-                        <input type="text" id="donorPincode" placeholder="507001" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
-                    </div>
-
-                    <div class="md:col-span-2 flex items-center justify-between border-t border-gray-800 pt-3">
-                        <div>
-                            <label class="block font-bold text-xs text-gray-300">📍 Geo-Tag Radius Location</label>
-                            <p id="regLocationStatus" class="text-[10px] text-gray-500 mt-0.5">Unlinked locations default to pincode matching.</p>
-                        </div>
-                        <button type="button" onclick="getLiveLocationForDonor('register')" class="text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/40 px-3 py-1.5 rounded-lg hover:bg-emerald-900 transition-all cursor-pointer shrink-0">
-                            <i class="fa-solid fa-location-dot"></i> Link Coordinates
-                        </button>
-                        <input type="hidden" id="donorLat"><input type="hidden" id="donorLng">
-                    </div>
-
-                    <div class="md:col-span-2 flex items-start gap-2 py-1">
-                        <input type="checkbox" id="privacy" class="w-4 h-4 rounded bg-gray-950 border-gray-800 text-emerald-500 mt-0.5 focus:ring-0">
-                        <label class="text-[11px] text-gray-400 cursor-pointer select-none leading-tight" for="privacy">Hide contact phone number publicly; require "Proxy Call" authorization.</label>
-                    </div>
-                </div>
-
-                <button type="button" id="submitDonorBtn" onclick="saveDonorData()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black py-3.5 px-4 rounded-xl shadow-xl shadow-emerald-950 text-xs uppercase tracking-wider cursor-pointer transition-all">
-                    <i class="fa-solid fa-check"></i> Submit Registration
-                </button>
-            </div>
-        </section>
-    </main>
-
-    <!-- PAGE 3: MANAGE PROFILE PAGE -->
-    <main id="manageProfilePage" class="container mx-auto px-4 pb-12 max-w-xl hidden">
-        <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500"></div>
-            <div class="flex items-center gap-3 mb-6">
-                <i class="fa-solid fa-user-shield text-amber-400 text-2xl"></i>
-                <h2 class="text-2xl font-black uppercase tracking-wider text-3d-metallic">Profile Management</h2>
-            </div>
-            
-            <!-- Auth Box -->
-            <div id="authManageBox" class="space-y-4 text-left py-2">
-                <p class="text-xs text-gray-400 text-center leading-relaxed">Enter registered phone number and password to authenticate.</p>
-                <div class="space-y-3 max-w-sm mx-auto">
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Mobile Number</label>
-                        <input type="tel" id="loginPhone" placeholder="9876543210" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-amber-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Password</label>
-                        <input type="password" id="loginPassword" placeholder="******" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-amber-500 focus:outline-none">
-                    </div>
-                    <button type="button" onclick="loginWithPassword()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-black py-3 px-5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-amber-950 transition-all">
-                        <i class="fa-solid fa-lock-open"></i> Authorize & Edit
-                    </button>
-                </div>
-            </div>
-
-            <!-- Profile Edit Box -->
-            <div id="profileEditFormBox" class="hidden space-y-5 mt-2">
-                <div class="bg-amber-950/30 p-4 rounded-2xl border border-amber-500/30 flex justify-between items-center">
-                    <div>
-                        <h4 class="font-bold text-xs text-amber-300 uppercase tracking-wider">Live Donor Availability Status</h4>
-                        <p class="text-[10px] text-gray-400">Toggle active status off if recently donated or unavailable.</p>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="editStatusToggle" class="sr-only peer">
-                        <div class="w-11 h-6 bg-gray-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-                    </label>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="hidden" id="editDocId">
-                    <input type="hidden" id="editDonorLat"><input type="hidden" id="editDonorLng">
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Name</label>
-                        <input type="text" id="editDonorName" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Blood Group</label>
-                        <select id="editDonorBlood" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
-                            <option value="A+">A+</option><option value="A-">A-</option>
-                            <option value="B+">B+</option><option value="B-">B-</option>
-                            <option value="O+">O+</option><option value="O-">O-</option>
-                            <option value="AB+">AB+</option><option value="AB-">AB-</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Age</label>
-                        <input type="number" id="editDonorAge" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Area / Region</label>
-                        <input type="text" id="editDonorArea" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Pin Code</label>
-                        <input type="text" id="editDonorPincode" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Email Address</label>
-                        <input type="email" id="editDonorEmail" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">New Password (Optional)</label>
-                        <input type="password" id="editDonorPassword" placeholder="Leave blank to keep current" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
-                    </div>
-                    <div class="flex items-end">
-                        <button type="button" onclick="getLiveLocationForDonor('edit')" class="w-full text-xs font-bold text-amber-300 bg-amber-950/60 border border-amber-500/40 px-3 py-2.5 rounded-xl hover:bg-amber-900 transition-all cursor-pointer">
-                            <i class="fa-solid fa-location-dot"></i> Update Geo-Tag
-                        </button>
-                    </div>
-                    <div class="md:col-span-2">
-                        <p id="editLocationStatus" class="text-[10px] text-gray-500 font-medium"></p>
-                    </div>
-                    <div class="md:col-span-2 flex items-start gap-2">
-                        <input type="checkbox" id="editPrivacy" class="w-4 h-4 rounded bg-gray-950 border-gray-800 text-amber-500 mt-0.5">
-                        <label class="text-[11px] text-gray-400 cursor-pointer select-none" for="editPrivacy">Hide Mobile Phone Number</label>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3 pt-2">
-                    <button type="button" onclick="updateDonorProfile()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-xs flex justify-center items-center gap-1.5 shadow-md cursor-pointer"><i class="fa-solid fa-floppy-disk"></i> Save Modifications</button>
-                    <button type="button" onclick="deleteDonorProfile()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-4 rounded-xl text-xs flex justify-center items-center gap-1.5 shadow-md cursor-pointer"><i class="fa-solid fa-trash-can"></i> Terminate Profile</button>
-                </div>
-                
-                <div class="border-t border-gray-800 pt-3 mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button type="button" onclick="shareProfileAsImage()" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2.5 px-4 rounded-xl text-xs flex justify-center items-center gap-1.5 cursor-pointer"><i class="fa-brands fa-whatsapp"></i> Export WhatsApp Card</button>
-                    <button type="button" onclick="logoutProfile()" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold py-2.5 px-4 rounded-xl text-xs flex justify-center items-center gap-1.5 cursor-pointer"><i class="fa-solid fa-right-from-bracket"></i> Session Logout</button>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- PAGE 4: OFFICIAL HELPLINES PAGE -->
-    <main id="helplinePage" class="container mx-auto px-4 pb-12 max-w-5xl hidden">
-        <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500"></div>
-            <div class="flex items-center gap-3 border-b border-gray-800 pb-4 mb-6">
-                <div class="bg-gray-800/80 text-cyan-400 p-3 rounded-xl border border-gray-700"><i class="fa-solid fa-hospital-user text-2xl"></i></div>
-                <div>
-                    <h2 class="text-xl md:text-2xl font-black uppercase tracking-wider text-3d-metallic">Official Blood Banks & Helplines</h2>
-                    <p class="text-xs text-gray-400 font-medium">Verified Institutional Blood Banks (Telangana & Andhra Pradesh)</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center"><span class="bg-red-950 text-red-400 border border-red-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">Govt | Telangana</span><span class="text-[10px] text-gray-500 font-bold">Warangal</span></div>
-                        <h4 class="font-bold text-gray-200 mt-2 text-xs">MGM Govt Hospital Blood Bank</h4>
-                        <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> MGM Hospital Campus, Nizampura</p>
-                    </div>
-                    <a href="tel:08702441999" class="w-full bg-gray-950 hover:bg-gray-800 text-red-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 0870-2441999</a>
-                </div>
-
-                <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center"><span class="bg-red-950 text-red-400 border border-red-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">Govt | Telangana</span><span class="text-[10px] text-gray-500 font-bold">Khammam</span></div>
-                        <h4 class="font-bold text-gray-200 mt-2 text-xs">Govt Main Hospital Blood Bank</h4>
-                        <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> District Hospital, Wyra Road</p>
-                    </div>
-                    <a href="tel:08742222340" class="w-full bg-gray-950 hover:bg-gray-800 text-red-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 08742-222340</a>
-                </div>
-
-                <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center"><span class="bg-red-950 text-red-400 border border-red-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">Govt | Telangana</span><span class="text-[10px] text-gray-500 font-bold">Hyderabad</span></div>
-                        <h4 class="font-bold text-gray-200 mt-2 text-xs">Institute of Preventive Medicine (IPM)</h4>
-                        <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> Narayanguda, Hyderabad</p>
-                    </div>
-                    <a href="tel:04027560193" class="w-full bg-gray-950 hover:bg-gray-800 text-red-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 040-27560193</a>
-                </div>
-
-                <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center"><span class="bg-cyan-950 text-cyan-400 border border-cyan-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">NGO | Andhra Pradesh</span><span class="text-[10px] text-gray-500 font-bold">Vijayawada</span></div>
-                        <h4 class="font-bold text-gray-200 mt-2 text-xs">Indian Red Cross Blood Bank</h4>
-                        <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> Governorpet, Museum Road</p>
-                    </div>
-                    <a href="tel:08662572277" class="w-full bg-gray-950 hover:bg-gray-800 text-cyan-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 0866-2572277</a>
-                </div>
-
-                <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center"><span class="bg-red-950 text-red-400 border border-red-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">Govt | Andhra Pradesh</span><span class="text-[10px] text-gray-500 font-bold">Visakhapatnam</span></div>
-                        <h4 class="font-bold text-gray-200 mt-2 text-xs">KGH Government Hospital Blood Bank</h4>
-                        <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> King George Hospital, Maharani Peta</p>
-                    </div>
-                    <a href="tel:08912564891" class="w-full bg-gray-950 hover:bg-gray-800 text-red-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 0891-2564891</a>
-                </div>
-
-                <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center"><span class="bg-red-950 text-red-400 border border-red-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">Govt | Andhra Pradesh</span><span class="text-[10px] text-gray-500 font-bold">Guntur</span></div>
-                        <h4 class="font-bold text-gray-200 mt-2 text-xs">Govt General Hospital (GGH) Blood Bank</h4>
-                        <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> Medical College Road, Guntur</p>
-                    </div>
-                    <a href="tel:08632233883" class="w-full bg-gray-950 hover:bg-gray-800 text-red-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 0863-2233883</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- PAGE 5: ABOUT & INSTRUCTIONS PAGE -->
-    <main id="aboutPage" class="container mx-auto px-4 pb-12 max-w-3xl hidden">
-        <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
-            <div class="flex items-center gap-3 border-b border-gray-800 pb-4 mb-6">
-                <div class="bg-gray-800/80 text-blue-400 p-3 rounded-xl border border-gray-700"><i class="fa-solid fa-circle-info text-2xl"></i></div>
-                <div>
-                    <h2 class="text-xl md:text-2xl font-black uppercase tracking-wider text-3d-metallic">System Operational Guidelines</h2>
-                    <p class="text-xs text-gray-400 font-medium">DoBlood.online Protocol & Ethical Mandate</p>
-                </div>
-            </div>
-
-            <div class="space-y-6 text-sm leading-relaxed text-gray-300">
-                <div class="bg-gray-900/80 p-5 rounded-2xl border border-gray-800">
-                    <h3 class="text-xs font-black text-gray-200 uppercase tracking-wider mb-3 border-b border-gray-800 pb-2 flex items-center gap-2"><i class="fa-solid fa-terminal text-red-500"></i> Platform Execution Steps</h3>
-                    <ul class="space-y-2.5 text-xs font-medium text-gray-400 list-decimal list-inside">
-                        <li><strong class="text-gray-200">Register as Donor:</strong> Execute "Become Donor", provide bio-metrics & set an encrypted password.</li>
-                        <li><strong class="text-gray-200">Locate Donors:</strong> To enforce anti-spam protocols, login credentials are mandatory to execute search queries.</li>
-                        <li><strong class="text-gray-200">Emergency Alerts:</strong> Dispatch urgent requests from the dashboard to broadcast on the network live wall and active client push notifications.</li>
-                        <li><strong class="text-gray-200">Profile Management:</strong> Navigate to "Manage Profile" to toggle live status, alter location metrics, or terminate records.</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-red-950/30 border-l-4 border-red-600 p-4 rounded-r-2xl my-4 border-t border-b border-r border-red-900/30">
-                    <h4 class="font-bold text-red-400 text-xs uppercase tracking-wider mb-1"><i class="fa-solid fa-triangle-exclamation"></i> Non-Commercial Disclaimer:</h4>
-                    <p class="text-gray-300 text-xs leading-relaxed">
-                        DoBlood.online operates strictly as a non-commercial, autonomous emergency bridge connecting voluntary blood donors with patients. Commercialization or monetized trading of human blood is strictly prohibited by law. DoBlood.online disclaims all liability for unauthorized financial solicitations.
+                    <span class="text-xs font-black bg-red-950/80 border border-red-500/40 text-red-400 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-inner">
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span> SAVE LIVES
+                    </span>
+                    <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider hidden md:block">
+                        <i class="fa-solid fa-lock text-red-500 mr-1"></i> End-to-End Encrypted Data
                     </p>
                 </div>
             </div>
-        </section>
-    </main>
+        </header>
 
-    <!-- PAGE 6: MAIN HOME DASHBOARD TABLE PAGE -->
-    <main id="mainTablePage" class="container mx-auto px-4 pb-12 max-w-6xl">
-        <!-- Live Grid Stats Bar -->
-        <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4 mb-6">
-            <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border border-gray-800 relative overflow-hidden">
-                <div class="absolute right-2 bottom-1 opacity-10 text-4xl text-gray-100"><i class="fa-solid fa-users"></i></div>
-                <span class="text-[9px] font-black uppercase tracking-widest text-gray-400">Total Donors</span>
-                <span id="statTotal" class="text-2xl font-black mt-0.5 text-3d-metallic">0</span>
+        <!-- LIVE TICKER MARQUEE -->
+        <div class="bg-gray-900/90 border-b border-gray-800/60 py-2.5 overflow-hidden backdrop-blur-md">
+            <div class="container mx-auto px-4 flex items-center gap-3">
+                <span class="bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-md uppercase tracking-widest shrink-0 shadow-lg shadow-red-900/40 flex items-center gap-1">
+                    <i class="fa-solid fa-bolt text-amber-300"></i> ALERT:
+                </span>
+                <marquee class="text-xs font-bold text-gray-300 tracking-wide" scrollamount="5">
+                    Donate Blood — Save Human Lives. Your minimal effort restores hope in life. Join our decentralized community blood grid.
+                </marquee>
             </div>
-            <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border border-gray-800">
-                <div>
-                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group A</span>
-                    <span id="statA" class="text-xl font-black text-gray-200 mt-0.5">0</span>
-                </div>
-                <span class="bg-red-950 text-red-400 font-extrabold px-2.5 py-1 rounded-xl text-xs border border-red-800/50">A</span>
-            </div>
-            <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border border-gray-800">
-                <div>
-                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group B</span>
-                    <span id="statB" class="text-xl font-black text-gray-200 mt-0.5">0</span>
-                </div>
-                <span class="bg-red-950 text-red-400 font-extrabold px-2.5 py-1 rounded-xl text-xs border border-red-800/50">B</span>
-            </div>
-            <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border border-gray-800">
-                <div>
-                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group O</span>
-                    <span id="statO" class="text-xl font-black text-gray-200 mt-0.5">0</span>
-                </div>
-                <span class="bg-red-950 text-red-400 font-extrabold px-2.5 py-1 rounded-xl text-xs border border-red-800/50">O</span>
-            </div>
-            <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between col-span-2 sm:col-span-1 border border-gray-800">
-                <div>
-                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group AB</span>
-                    <span id="statAB" class="text-xl font-black text-gray-200 mt-0.5">0</span>
-                </div>
-                <span class="bg-red-950 text-red-400 font-extrabold px-2.5 py-1 rounded-xl text-xs border border-red-800/50">AB</span>
-            </div>
-        </section>
+        </div>
 
-        <!-- Emergency Broadcast & Live Wall Section -->
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <!-- Emergency Alert Broadcast Form -->
-            <div class="glass-card p-5 rounded-3xl relative overflow-hidden lg:col-span-1 border border-gray-800">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-amber-500"></div>
-                <h3 class="font-black text-xs text-red-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-bullhorn text-red-500 animate-pulse"></i> Dispatch Emergency Alert
-                </h3>
-                <div class="space-y-2.5 text-xs">
-                    <input type="text" id="reqPatientName" placeholder="Patient Full Name" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                    <div class="grid grid-cols-2 gap-2">
-                        <select id="reqBloodGroup" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                            <option value="">-- Group --</option>
-                            <option value="A+">A+</option><option value="A-">A-</option>
-                            <option value="B+">B+</option><option value="B-">B-</option>
-                            <option value="O+">O+</option><option value="O-">O-</option>
-                            <option value="AB+">AB+</option><option value="AB-">AB-</option>
-                        </select>
-                        <input type="text" id="reqHospital" placeholder="Hospital / City" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                    </div>
-                    <input type="tel" id="reqContact" placeholder="Emergency Phone Number" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
-                    <button type="button" onclick="submitEmergencyRequest()" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-2.5 px-3 rounded-xl shadow-lg shadow-red-950 text-xs uppercase tracking-wider flex justify-center items-center gap-1.5 cursor-pointer transition-all">
-                        <i class="fa-solid fa-paper-plane"></i> Broadcast Alert
+        <!-- GLOBAL NOTIFICATION BANNER -->
+        <div class="container mx-auto px-4 max-w-6xl mt-4">
+            <div id="globalNotification" class="hidden mb-6 p-4 rounded-2xl border flex items-start gap-3 shadow-2xl transition-all">
+                <div id="notiIcon" class="text-xl mt-0.5"></div>
+                <div>
+                    <h4 id="notiTitle" class="font-bold text-sm tracking-wide uppercase"></h4>
+                    <p id="notiMessage" class="text-xs mt-0.5 leading-relaxed opacity-90"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE CONTAINER SYSTEM -->
+        <div id="pageContainer">
+
+            <!-- PAGE 0: MAIN HOME DASHBOARD TABLE PAGE -->
+            <main id="mainTablePage" class="container mx-auto px-4 pt-4 pb-12 max-w-6xl">
+                <!-- MAIN DASHBOARD QUICK ACTIONS -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <button onclick="showPage('find-blood-page')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
+                        <div class="bg-gray-800/80 text-red-500 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
+                            <i class="fa-solid fa-magnifying-glass-location"></i>
+                        </div>
+                        <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Find Donors</span>
+                        <span class="text-[9px] text-gray-400 font-medium mt-0.5">Search Network</span>
+                    </button>
+
+                    <button onclick="showPage('become-donor-page')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
+                        <div class="bg-gray-800/80 text-emerald-400 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Become Donor</span>
+                        <span class="text-[9px] text-gray-400 font-medium mt-0.5">Join Registry</span>
+                    </button>
+
+                    <button onclick="showPage('manage-profile-page')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
+                        <div class="bg-gray-800/80 text-amber-400 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-amber-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </div>
+                        <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Manage Profile</span>
+                        <span class="text-[9px] text-gray-400 font-medium mt-0.5">Edit Credentials</span>
+                    </button>
+
+                    <button onclick="showPage('helplinePage')" class="glass-card p-4 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
+                        <div class="bg-gray-800/80 text-cyan-400 p-3.5 rounded-xl text-2xl mb-2 group-hover:scale-110 group-hover:bg-cyan-600 group-hover:text-white transition-all shadow-inner border border-gray-700/50">
+                            <i class="fa-solid fa-hospital-user"></i>
+                        </div>
+                        <span class="text-xs md:text-sm font-black text-gray-200 uppercase tracking-wider">Blood Banks</span>
+                        <span class="text-[9px] text-gray-400 font-medium mt-0.5">Helpline Hubs</span>
+                    </button>
+
+                    <button onclick="showPage('aboutPage')" class="glass-card p-3 rounded-2xl flex items-center justify-center gap-2 transition-all hover:bg-gray-800/90 col-span-2 md:col-span-4 mt-1 cursor-pointer border border-gray-800">
+                        <i class="fa-solid fa-circle-info text-blue-400"></i>
+                        <span class="text-xs font-bold text-gray-300 uppercase tracking-wider">About Platform & Operational Protocols</span>
                     </button>
                 </div>
-            </div>
-            
-            <!-- Live Wall Feed -->
-            <div class="glass-card p-5 rounded-3xl relative overflow-hidden lg:col-span-2 flex flex-col h-[240px] lg:h-auto border border-gray-800">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-900"></div>
-                <h3 class="font-black text-xs text-gray-300 uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-tower-cell text-red-500"></i> Live Emergency Stream (Live Wall)
-                </h3>
-                <div id="emergencyLiveWall" class="overflow-y-auto flex-1 space-y-2 pr-1 divide-y divide-gray-800/80 text-xs">
-                    <p class="text-gray-500 text-center py-8">No active emergency alerts currently in queue.</p>
-                </div>
-            </div>
-        </section>
 
-        <!-- Privacy Assurance Banner -->
-        <section class="glass-card p-6 md:p-8 rounded-3xl text-center relative overflow-hidden border border-gray-800">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
-            <div class="max-w-xl mx-auto py-2">
-                <div class="text-3xl text-emerald-400 mb-2"><i class="fa-solid fa-shield-halved animate-pulse"></i></div>
-                <h2 class="text-lg md:text-xl font-black text-gray-200 uppercase tracking-wider mb-2">Zero-Trust Privacy Protocol</h2>
-                <p class="text-xs text-gray-400 leading-relaxed mb-5">Donor data is encrypted and hidden from open indexing to prevent harassment. Authenticate your donor profile to query active donors nearby.</p>
-                <div class="flex flex-wrap justify-center gap-3">
-                    <button onclick="showPage('find-blood-page')" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-red-950 cursor-pointer transition-all"><i class="fa-solid fa-magnifying-glass mr-1"></i> Locate Donors</button>
-                    <button onclick="showPage('become-donor-page')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-emerald-950 cursor-pointer transition-all"><i class="fa-solid fa-user-plus mr-1"></i> Register as Donor</button>
-                </div>
-            </div>
-        </section>
-    </main>
+                <!-- Live Grid Stats Bar -->
+                <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4 mb-6">
+                    <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border border-gray-800 relative overflow-hidden">
+                        <div class="absolute right-2 bottom-1 opacity-10 text-4xl text-gray-100"><i class="fa-solid fa-users"></i></div>
+                        <span class="text-[9px] font-black uppercase tracking-widest text-gray-400">Total Donors</span>
+                        <span id="statTotal" class="text-2xl font-black mt-0.5 text-3d-metallic">0</span>
+                    </div>
+                    <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border border-gray-800">
+                        <div>
+                            <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group A</span>
+                            <span id="statA" class="text-xl font-black text-gray-200 mt-0.5">0</span>
+                        </div>
+                        <span class="bg-red-950 text-red-400 font-extrabold px-2.5 py-1 rounded-xl text-xs border border-red-800/50">A</span>
+                    </div>
+                    <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border border-gray-800">
+                        <div>
+                            <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group B</span>
+                            <span id="statB" class="text-xl font-black text-gray-200 mt-0.5">0</span>
+                        </div>
+                        <span class="bg-red-950 text-red-400 font-extrabold px-2.5 py-1 rounded-xl text-xs border border-red-800/50">B</span>
+                    </div>
+                    <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border border-gray-800">
+                        <div>
+                            <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group O</span>
+                            <span id="statO" class="text-xl font-black text-gray-200 mt-0.5">0</span>
+                        </div>
+                        <span class="bg-red-950 text-red-400 font-extrabold px-2.5 py-1 rounded-xl text-xs border border-red-800/50">O</span>
+                    </div>
+                    <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between col-span-2 sm:col-span-1 border border-gray-800">
+                        <div>
+                            <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block">Group AB</span>
+                            <span id="statAB" class="text-xl font-black text-gray-200 mt-0.5">0</span>
+                        </div>
+                        <span class="bg-red-950 text-red-400 font-extrabold px-2.5 py-1 rounded-xl text-xs border border-red-800/50">AB</span>
+                    </div>
+                </section>
+
+                <!-- Emergency Broadcast & Live Wall Section -->
+                <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Emergency Alert Broadcast Form -->
+                    <div class="glass-card p-5 rounded-3xl relative overflow-hidden lg:col-span-1 border border-gray-800">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-amber-500"></div>
+                        <h3 class="font-black text-xs text-red-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-bullhorn text-red-500 animate-pulse"></i> Dispatch Emergency Alert
+                        </h3>
+                        <div class="space-y-2.5 text-xs">
+                            <input type="text" id="reqPatientName" placeholder="Patient Full Name" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                            <div class="grid grid-cols-2 gap-2">
+                                <select id="reqBloodGroup" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                                    <option value="">-- Group --</option>
+                                    <option value="A+">A+</option><option value="A-">A-</option>
+                                    <option value="B+">B+</option><option value="B-">B-</option>
+                                    <option value="O+">O+</option><option value="O-">O-</option>
+                                    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                                </select>
+                                <input type="text" id="reqHospital" placeholder="Hospital / City" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                            </div>
+                            <input type="tel" id="reqContact" placeholder="Emergency Phone Number" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                            <button type="button" onclick="submitEmergencyRequest()" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-2.5 px-3 rounded-xl shadow-lg shadow-red-950 text-xs uppercase tracking-wider flex justify-center items-center gap-1.5 cursor-pointer transition-all">
+                                <i class="fa-solid fa-paper-plane"></i> Broadcast Alert
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Live Wall Feed -->
+                    <div class="glass-card p-5 rounded-3xl relative overflow-hidden lg:col-span-2 flex flex-col h-[240px] lg:h-auto border border-gray-800">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-900"></div>
+                        <h3 class="font-black text-xs text-gray-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-tower-cell text-red-500"></i> Live Emergency Stream (Live Wall)
+                        </h3>
+                        <div id="emergencyLiveWall" class="overflow-y-auto flex-1 space-y-2 pr-1 divide-y divide-gray-800/80 text-xs">
+                            <p class="text-gray-500 text-center py-8">No active emergency alerts currently in queue.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Privacy Assurance Banner -->
+                <section class="glass-card p-6 md:p-8 rounded-3xl text-center relative overflow-hidden border border-gray-800">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
+                    <div class="max-w-xl mx-auto py-2">
+                        <div class="text-3xl text-emerald-400 mb-2"><i class="fa-solid fa-shield-halved animate-pulse"></i></div>
+                        <h2 class="text-lg md:text-xl font-black text-gray-200 uppercase tracking-wider mb-2">Zero-Trust Privacy Protocol</h2>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-5">Donor data is encrypted and hidden from open indexing to prevent harassment. Authenticate your donor profile to query active donors nearby.</p>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <button onclick="showPage('find-blood-page')" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-red-950 cursor-pointer transition-all"><i class="fa-solid fa-magnifying-glass mr-1"></i> Locate Donors</button>
+                            <button onclick="showPage('become-donor-page')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-emerald-950 cursor-pointer transition-all"><i class="fa-solid fa-user-plus mr-1"></i> Register as Donor</button>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 1: FIND BLOOD PAGE (SEPARATE FULL PAGE) -->
+            <main id="findBloodPage" class="container mx-auto px-4 pt-6 pb-12 max-w-2xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+                
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden mb-6">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 via-rose-500 to-amber-500"></div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <i class="fa-solid fa-satellite-dish text-red-500 text-2xl"></i>
+                        <h2 class="text-2xl font-black uppercase tracking-wider text-3d-metallic">Locate Donors</h2>
+                    </div>
+
+                    <!-- Authentication Shield Box -->
+                    <div id="searchAuthBox" class="bg-gray-900/90 p-5 border border-gray-800 rounded-2xl text-left shadow-inner">
+                        <p class="text-xs text-gray-400 mb-4 leading-relaxed font-medium">
+                            <i class="fa-solid fa-shield-halved text-red-500 mr-1"></i> <strong class="text-gray-200">Security Access Required:</strong> To protect registered donors from tele-spam, access is restricted to verified donors. Authenticate with your phone & password.
+                        </p>
+                        <div class="space-y-3 max-w-xs mx-auto">
+                            <input type="tel" id="searchLoginPhone" placeholder="Mobile Number" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                            <input type="password" id="searchLoginPassword" placeholder="Password" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                            <button type="button" onclick="verifyDonorForSearch()" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-wider flex justify-center items-center gap-2 transition-all cursor-pointer shadow-lg shadow-red-950">
+                                <i class="fa-solid fa-lock-open"></i> Unlock Search Engine
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search Form Engine Box -->
+                    <div id="searchFormBox" class="hidden space-y-5">
+                        <p class="text-gray-400 text-xs leading-relaxed">Search donors via parameters: Blood Group, Pin Code, Area, or Geo-location Radius.</p>
+                        
+                        <div>
+                            <label class="block font-bold mb-1.5 text-xs text-gray-300 uppercase tracking-wider">Target Blood Group</label>
+                            <select id="searchBlood" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-xs text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                                <option value="">-- Select Group --</option>
+                                <option value="A+">A+</option><option value="A-">A-</option>
+                                <option value="B+">B+</option><option value="B-">B-</option>
+                                <option value="O+">O+</option><option value="O-">O-</option>
+                                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold mb-1.5 text-xs text-gray-300 uppercase tracking-wider">Sub-District / Area / Pincode</label>
+                            <input id="searchArea" type="text" placeholder="e.g., Khammam or 507001" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-xs text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                        </div>
+                        
+                        <div class="border-t border-dashed border-gray-800 pt-4">
+                            <label class="block font-bold mb-1.5 text-xs text-gray-300 uppercase tracking-wider">📍 Live Radius Range Search</label>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <select id="searchRadius" class="flex-1 bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-red-500 focus:outline-none">
+                                    <option value="">-- Select Distance Radius --</option>
+                                    <option value="5">Within 5 KM Radius</option>
+                                    <option value="10">Within 10 KM Radius</option>
+                                    <option value="20">Within 20 KM Radius</option>
+                                </select>
+                                <button type="button" onclick="getLiveLocationForSearch()" class="bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold px-4 py-2.5 border border-gray-700 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer">
+                                    <i class="fa-solid fa-location-crosshairs text-red-500"></i> Geo-Tag
+                                </button>
+                            </div>
+                            <p id="locationSearchStatus" class="text-[10px] text-gray-500 mt-1 font-medium"></p>
+                            <input type="hidden" id="searchLat"><input type="hidden" id="searchLng">
+                        </div>
+
+                        <button type="button" onclick="searchDonorsData()" class="w-full bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black py-3.5 px-4 rounded-xl shadow-xl shadow-red-950 uppercase tracking-wider text-xs flex justify-center items-center gap-2 cursor-pointer transition-all">
+                            <i class="fa-solid fa-bolt"></i> Execute Donor Query
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Search Results Grid Section -->
+                <section id="searchResultTableBox" class="hidden glass-card p-5 rounded-3xl overflow-hidden">
+                    <h3 class="font-black text-xs text-gray-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-red-500"></i> Query Results:
+                    </h3>
+                    <div class="overflow-x-auto rounded-xl border border-gray-800 bg-gray-950">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-900 text-gray-400 text-[10px] font-black uppercase tracking-wider border-b border-gray-800">
+                                    <th class="p-3">Identity</th>
+                                    <th class="p-3">Group</th>
+                                    <th class="p-3">Locality</th>
+                                    <th class="p-3 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchResultsTbody" class="divide-y divide-gray-800/60 text-xs text-gray-300"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 2: BECOME DONOR PAGE (SEPARATE FULL PAGE) -->
+            <main id="becomeDonorPage" class="container mx-auto px-4 pt-6 pb-12 max-w-2xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500"></div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <i class="fa-solid fa-id-card text-emerald-400 text-2xl"></i>
+                        <h2 class="text-2xl font-black uppercase tracking-wider text-3d-metallic">Donor Registration</h2>
+                    </div>
+                    
+                    <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-3.5 mb-5 text-emerald-300 text-xs flex items-start gap-2.5">
+                        <i class="fa-solid fa-shield-halved text-emerald-400 text-base mt-0.5"></i>
+                        <div>
+                            <span class="font-bold">Encrypted Registration:</span> Submit details & create a secret password. Use credentials to manage availability or search network.
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Full Legal Name *</label>
+                                <input type="text" id="donorName" placeholder="John Doe" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Mobile Phone *</label>
+                                <input type="tel" id="donorPhone" placeholder="9876543210" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Email Address *</label>
+                                <input type="email" id="donorEmail" placeholder="name@domain.com" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Access Password *</label>
+                                <input type="password" id="donorPassword" placeholder="******" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Blood Group *</label>
+                                <select id="donorBlood" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
+                                    <option value="">-- Select Group --</option>
+                                    <option value="A+">A+</option><option value="A-">A-</option>
+                                    <option value="B+">B+</option><option value="B-">B-</option>
+                                    <option value="O+">O+</option><option value="O-">O-</option>
+                                    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Age (Years) *</label>
+                                <input type="number" id="donorAge" placeholder="25" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Area / Sub-District *</label>
+                                <input type="text" id="donorArea" placeholder="Village / Street / Town" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Postal Pin Code *</label>
+                                <input type="text" id="donorPincode" placeholder="507001" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-emerald-500 focus:outline-none">
+                            </div>
+
+                            <div class="md:col-span-2 flex items-center justify-between border-t border-gray-800 pt-3">
+                                <div>
+                                    <label class="block font-bold text-xs text-gray-300">📍 Geo-Tag Radius Location</label>
+                                    <p id="regLocationStatus" class="text-[10px] text-gray-500 mt-0.5">Unlinked locations default to pincode matching.</p>
+                                </div>
+                                <button type="button" onclick="getLiveLocationForDonor('register')" class="text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/40 px-3 py-1.5 rounded-lg hover:bg-emerald-900 transition-all cursor-pointer shrink-0">
+                                    <i class="fa-solid fa-location-dot"></i> Link Coordinates
+                                </button>
+                                <input type="hidden" id="donorLat"><input type="hidden" id="donorLng">
+                            </div>
+
+                            <div class="md:col-span-2 flex items-start gap-2 py-1">
+                                <input type="checkbox" id="privacy" class="w-4 h-4 rounded bg-gray-950 border-gray-800 text-emerald-500 mt-0.5 focus:ring-0">
+                                <label class="text-[11px] text-gray-400 cursor-pointer select-none leading-tight" for="privacy">Hide contact phone number publicly; require "Proxy Call" authorization.</label>
+                            </div>
+                        </div>
+
+                        <button type="button" id="submitDonorBtn" onclick="saveDonorData()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black py-3.5 px-4 rounded-xl shadow-xl shadow-emerald-950 text-xs uppercase tracking-wider cursor-pointer transition-all">
+                            <i class="fa-solid fa-check"></i> Submit Registration
+                        </button>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 3: MANAGE PROFILE PAGE (SEPARATE FULL PAGE) -->
+            <main id="manageProfilePage" class="container mx-auto px-4 pt-6 pb-12 max-w-2xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500"></div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <i class="fa-solid fa-user-shield text-amber-400 text-2xl"></i>
+                        <h2 class="text-2xl font-black uppercase tracking-wider text-3d-metallic">Profile Management</h2>
+                    </div>
+                    
+                    <!-- Auth Box -->
+                    <div id="authManageBox" class="space-y-4 text-left py-2">
+                        <p class="text-xs text-gray-400 text-center leading-relaxed">Enter registered phone number and password to authenticate.</p>
+                        <div class="space-y-3 max-w-sm mx-auto">
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Mobile Number</label>
+                                <input type="tel" id="loginPhone" placeholder="9876543210" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Password</label>
+                                <input type="password" id="loginPassword" placeholder="******" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 font-semibold focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <button type="button" onclick="loginWithPassword()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-black py-3 px-5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-amber-950 transition-all">
+                                <i class="fa-solid fa-lock-open"></i> Authorize & Edit
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Profile Edit Box -->
+                    <div id="profileEditFormBox" class="hidden space-y-5 mt-2">
+                        <div class="bg-amber-950/30 p-4 rounded-2xl border border-amber-500/30 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-xs text-amber-300 uppercase tracking-wider">Live Donor Availability Status</h4>
+                                <p class="text-[10px] text-gray-400">Toggle active status off if recently donated or unavailable.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="editStatusToggle" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="hidden" id="editDocId">
+                            <input type="hidden" id="editDonorLat"><input type="hidden" id="editDonorLng">
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Name</label>
+                                <input type="text" id="editDonorName" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Blood Group</label>
+                                <select id="editDonorBlood" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
+                                    <option value="A+">A+</option><option value="A-">A-</option>
+                                    <option value="B+">B+</option><option value="B-">B-</option>
+                                    <option value="O+">O+</option><option value="O-">O-</option>
+                                    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Age</label>
+                                <input type="number" id="editDonorAge" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Area / Region</label>
+                                <input type="text" id="editDonorArea" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Pin Code</label>
+                                <input type="text" id="editDonorPincode" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">Email Address</label>
+                                <input type="email" id="editDonorEmail" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1 text-[11px] text-gray-400 uppercase tracking-wider">New Password (Optional)</label>
+                                <input type="password" id="editDonorPassword" placeholder="Leave blank to keep current" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 font-semibold">
+                            </div>
+                            <div class="flex items-end">
+                                <button type="button" onclick="getLiveLocationForDonor('edit')" class="w-full text-xs font-bold text-amber-300 bg-amber-950/60 border border-amber-500/40 px-3 py-2.5 rounded-xl hover:bg-amber-900 transition-all cursor-pointer">
+                                    <i class="fa-solid fa-location-dot"></i> Update Geo-Tag
+                                </button>
+                            </div>
+                            <div class="md:col-span-2">
+                                <p id="editLocationStatus" class="text-[10px] text-gray-500 font-medium"></p>
+                            </div>
+                            <div class="md:col-span-2 flex items-start gap-2">
+                                <input type="checkbox" id="editPrivacy" class="w-4 h-4 rounded bg-gray-950 border-gray-800 text-amber-500 mt-0.5">
+                                <label class="text-[11px] text-gray-400 cursor-pointer select-none" for="editPrivacy">Hide Mobile Phone Number</label>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <button type="button" onclick="updateDonorProfile()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-xs flex justify-center items-center gap-1.5 shadow-md cursor-pointer"><i class="fa-solid fa-floppy-disk"></i> Save Modifications</button>
+                            <button type="button" onclick="deleteDonorProfile()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-4 rounded-xl text-xs flex justify-center items-center gap-1.5 shadow-md cursor-pointer"><i class="fa-solid fa-trash-can"></i> Terminate Profile</button>
+                        </div>
+                        
+                        <div class="border-t border-gray-800 pt-3 mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button type="button" onclick="shareProfileAsImage()" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2.5 px-4 rounded-xl text-xs flex justify-center items-center gap-1.5 cursor-pointer"><i class="fa-brands fa-whatsapp"></i> Export WhatsApp Card</button>
+                            <button type="button" onclick="logoutProfile()" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold py-2.5 px-4 rounded-xl text-xs flex justify-center items-center gap-1.5 cursor-pointer"><i class="fa-solid fa-right-from-bracket"></i> Session Logout</button>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 4: OFFICIAL HELPLINES PAGE (SEPARATE FULL PAGE) -->
+            <main id="helplinePage" class="container mx-auto px-4 pt-6 pb-12 max-w-5xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500"></div>
+                    <div class="flex items-center gap-3 border-b border-gray-800 pb-4 mb-6">
+                        <div class="bg-gray-800/80 text-cyan-400 p-3 rounded-xl border border-gray-700"><i class="fa-solid fa-hospital-user text-2xl"></i></div>
+                        <div>
+                            <h2 class="text-xl md:text-2xl font-black uppercase tracking-wider text-3d-metallic">Official Blood Banks & Helplines</h2>
+                            <p class="text-xs text-gray-400 font-medium">Verified Institutional Blood Banks (Telangana & Andhra Pradesh)</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center"><span class="bg-red-950 text-red-400 border border-red-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">Govt | Telangana</span><span class="text-[10px] text-gray-500 font-bold">Warangal</span></div>
+                                <h4 class="font-bold text-gray-200 mt-2 text-xs">MGM Govt Hospital Blood Bank</h4>
+                                <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> MGM Hospital Campus, Nizampura</p>
+                            </div>
+                            <a href="tel:08702441999" class="w-full bg-gray-950 hover:bg-gray-800 text-red-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 0870-2441999</a>
+                        </div>
+
+                        <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center"><span class="bg-red-950 text-red-400 border border-red-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">Govt | Telangana</span><span class="text-[10px] text-gray-500 font-bold">Khammam</span></div>
+                                <h4 class="font-bold text-gray-200 mt-2 text-xs">Govt Main Hospital Blood Bank</h4>
+                                <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> District Hospital, Wyra Road</p>
+                            </div>
+                            <a href="tel:08742222340" class="w-full bg-gray-950 hover:bg-gray-800 text-red-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 08742-222340</a>
+                        </div>
+
+                        <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center"><span class="bg-red-950 text-red-400 border border-red-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">Govt | Telangana</span><span class="text-[10px] text-gray-500 font-bold">Hyderabad</span></div>
+                                <h4 class="font-bold text-gray-200 mt-2 text-xs">Institute of Preventive Medicine (IPM)</h4>
+                                <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> Narayanguda, Hyderabad</p>
+                            </div>
+                            <a href="tel:04027560193" class="w-full bg-gray-950 hover:bg-gray-800 text-red-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 040-27560193</a>
+                        </div>
+
+                        <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center"><span class="bg-cyan-950 text-cyan-400 border border-cyan-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">NGO | Andhra Pradesh</span><span class="text-[10px] text-gray-500 font-bold">Vijayawada</span></div>
+                                <h4 class="font-bold text-gray-200 mt-2 text-xs">Indian Red Cross Blood Bank</h4>
+                                <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> Governorpet, Museum Road</p>
+                            </div>
+                            <a href="tel:08662572277" class="w-full bg-gray-950 hover:bg-gray-800 text-cyan-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 0866-2572277</a>
+                        </div>
+
+                        <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center"><span class="bg-red-950 text-red-400 border border-red-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">Govt | Andhra Pradesh</span><span class="text-[10px] text-gray-500 font-bold">Visakhapatnam</span></div>
+                                <h4 class="font-bold text-gray-200 mt-2 text-xs">KGH Government Hospital Blood Bank</h4>
+                                <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> King George Hospital, Maharani Peta</p>
+                            </div>
+                            <a href="tel:08912564891" class="w-full bg-gray-950 hover:bg-gray-800 text-red-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 0891-2564891</a>
+                        </div>
+
+                        <div class="bg-gray-900/90 p-4 rounded-2xl border border-gray-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center"><span class="bg-red-950 text-red-400 border border-red-800/50 font-bold text-[9px] px-2 py-0.5 rounded uppercase">Govt | Andhra Pradesh</span><span class="text-[10px] text-gray-500 font-bold">Guntur</span></div>
+                                <h4 class="font-bold text-gray-200 mt-2 text-xs">Govt General Hospital (GGH) Blood Bank</h4>
+                                <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i> Medical College Road, Guntur</p>
+                            </div>
+                            <a href="tel:08632233883" class="w-full bg-gray-950 hover:bg-gray-800 text-red-400 font-bold border border-gray-800 text-center py-2 rounded-xl text-xs mt-4 block"><i class="fa-solid fa-phone"></i> Call: 0863-2233883</a>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 5: ABOUT & INSTRUCTIONS PAGE (SEPARATE FULL PAGE) -->
+            <main id="aboutPage" class="container mx-auto px-4 pt-6 pb-12 max-w-3xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
+                    <div class="flex items-center gap-3 border-b border-gray-800 pb-4 mb-6">
+                        <div class="bg-gray-800/80 text-blue-400 p-3 rounded-xl border border-gray-700"><i class="fa-solid fa-circle-info text-2xl"></i></div>
+                        <div>
+                            <h2 class="text-xl md:text-2xl font-black uppercase tracking-wider text-3d-metallic">System Operational Guidelines</h2>
+                            <p class="text-xs text-gray-400 font-medium">DoBlood.online Protocol & Ethical Mandate</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6 text-sm leading-relaxed text-gray-300">
+                        <div class="bg-gray-900/80 p-5 rounded-2xl border border-gray-800">
+                            <h3 class="text-xs font-black text-gray-200 uppercase tracking-wider mb-3 border-b border-gray-800 pb-2 flex items-center gap-2"><i class="fa-solid fa-terminal text-red-500"></i> Platform Execution Steps</h3>
+                            <ul class="space-y-2.5 text-xs font-medium text-gray-400 list-decimal list-inside">
+                                <li><strong class="text-gray-200">Register as Donor:</strong> Execute "Become Donor", provide bio-metrics & set an encrypted password.</li>
+                                <li><strong class="text-gray-200">Locate Donors:</strong> To enforce anti-spam protocols, login credentials are mandatory to execute search queries.</li>
+                                <li><strong class="text-gray-200">Emergency Alerts:</strong> Dispatch urgent requests from the dashboard to broadcast on the network live wall and active client push notifications.</li>
+                                <li><strong class="text-gray-200">Profile Management:</strong> Navigate to "Manage Profile" to toggle live status, alter location metrics, or terminate records.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-red-950/30 border-l-4 border-red-600 p-4 rounded-r-2xl my-4 border-t border-b border-r border-red-900/30">
+                            <h4 class="font-bold text-red-400 text-xs uppercase tracking-wider mb-1"><i class="fa-solid fa-triangle-exclamation"></i> Non-Commercial Disclaimer:</h4>
+                            <p class="text-gray-300 text-xs leading-relaxed">
+                                DoBlood.online operates strictly as a non-commercial, autonomous emergency bridge connecting voluntary blood donors with patients. Commercialization or monetized trading of human blood is strictly prohibited by law. DoBlood.online disclaims all liability for unauthorized financial solicitations.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+        </div>
+    </div>
 
     <!-- HIDDEN CANVAS FOR WHATSAPP CARD EXPORT -->
     <canvas id="hiddenProfileCanvas" width="600" height="400" class="hidden"></canvas>
 
     <!-- FOOTER -->
-    <footer class="bg-gray-950 text-gray-500 text-center py-6 text-xs border-t border-gray-900">
+    <footer class="bg-gray-950 text-gray-500 text-center py-6 text-xs border-t border-gray-900 mt-auto">
         <div class="container mx-auto px-4">
             <p class="font-bold tracking-wider text-gray-400">© 2026 DoBlood.online | Autonomous Local Blood Line Network</p>
         </div>
@@ -788,11 +816,17 @@
             );
         };
 
+        // FULL PAGE SEPARATE ROUTING NAVIGATION LOGIC
         window.showPage = function(pageId) {
             const pages = ['findBloodPage', 'becomeDonorPage', 'manageProfilePage', 'aboutPage', 'helplinePage', 'mainTablePage'];
-            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+            pages.forEach(p => {
+                const el = document.getElementById(p);
+                if(el) el.classList.add('hidden');
+            });
 
-            if(pageId === 'home') document.getElementById('mainTablePage').classList.remove('hidden');
+            if(pageId === 'home') {
+                document.getElementById('mainTablePage').classList.remove('hidden');
+            }
             else if(pageId === 'find-blood-page') {
                 document.getElementById('findBloodPage').classList.remove('hidden');
                 if (!isSearchAuthenticated) {
@@ -801,10 +835,18 @@
                     document.getElementById('searchResultTableBox').classList.add('hidden');
                 }
             }
-            else if(pageId === 'become-donor-page') document.getElementById('becomeDonorPage').classList.remove('hidden');
-            else if(pageId === 'manage-profile-page') document.getElementById('manageProfilePage').classList.remove('hidden');
-            else if(pageId === 'aboutPage') document.getElementById('aboutPage').classList.remove('hidden');
-            else if(pageId === 'helplinePage') document.getElementById('helplinePage').classList.remove('hidden');
+            else if(pageId === 'become-donor-page') {
+                document.getElementById('becomeDonorPage').classList.remove('hidden');
+            }
+            else if(pageId === 'manage-profile-page') {
+                document.getElementById('manageProfilePage').classList.remove('hidden');
+            }
+            else if(pageId === 'aboutPage') {
+                document.getElementById('aboutPage').classList.remove('hidden');
+            }
+            else if(pageId === 'helplinePage') {
+                document.getElementById('helplinePage').classList.remove('hidden');
+            }
             window.scrollTo({top: 0, behavior: 'smooth'});
         };
 
@@ -1260,4 +1302,4 @@
         setTimeout(initApp, 500);
     </script>
 </body>
-                            </html>
+    </html>
