@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="en" class="dark"><head><!-- PLAYABLE_TOUCH_PATCH_V1 --><script>
+(function() {
+  if (window.__playableTouchPatchInstalled) return;
+  window.__playableTouchPatchInstalled = true;
+  var origAdd = EventTarget.prototype.addEventListener;
+  var blockedTypes = { touchstart: 1, touchmove: 1, wheel: 1 };
+  EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (blockedTypes[type]) {
+      if (options === undefined || options === null) {
+        options = { passive: true };
+      } else if (typeof options === 'boolean') {
+        options = { capture: options, passive: true };
+      } else {
+        options = Object.assign({}, options, { passive: true });
+      }
+    }
+    return origAdd.call(this, type, listener, options);
+  };
+})();
+</script><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Privacy Policy - DoBlood.online</title><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#030712;color:#f3f4f6;}</style></head><body class="min-h-screen flex flex-col"><header class="sticky top-0 z-50 bg-gray-950/80 backdrop-blur-xl border-b border-gray-800 p-4"><div class="container mx-auto flex justify-between items-center"><a href="index.html" class="text-xl font-black">DoBlood<span class="text-red-500">.online</span></a><a href="index.html" class="text-xs bg-gray-800 px-3 py-2 rounded-xl">Back to Home</a></div></header><main class="container mx-auto max-w-3xl p-6 flex-1"><div class="bg-gray-900/60 border border-gray-800 p-8 rounded-3xl"><h1 class="text-2xl font-black uppercase mb-2">Privacy Policy</h1><p class="text-[11px] text-gray-500 mb-6">Last Updated: May 2026 | Effective for DoBlood.online App & Website</p><div class="space-y-5 text-xs leading-relaxed text-gray-400"><p><b class="text-gray-200">1. What Data We Collect:</b> We collect Name, Phone Number, Email, Blood Group, Age, Area, Pincode, and optional GPS coordinates (lat/lng) when you register as a donor. This is essential to connect you with a patient nearby.</p><p><b class="text-gray-200">2. How We Use Data:</b> Your data is used ONLY to show your profile to verified users searching for blood in your area. We do NOT sell, rent, or share your phone number with third-party advertisers.</p><p><b class="text-gray-200">3. Data Storage:</b> All data is securely stored in Google Firebase Firestore (Google Cloud) with encrypted transmission (HTTPS). Passwords are stored securely.</p><p><b class="text-gray-200">4. Privacy Control:</b> You have an option "Hide contact phone number publicly". If enabled, your number is hidden and others must request contact via app.</p><p><b class="text-gray-200">5. Data Retention:</b> Data is retained until you delete your profile via Manage Profile > Terminate Profile. Upon deletion, all data is permanently removed from Firebase within 24 hours.</p><p><b class="text-gray-200">6. Children's Privacy:</b> This service is not for users under 18 years of age.</p><p><b class="text-gray-200">7. Contact:</b> For any privacy concerns, contact us at support@doblood.online</p></div></div></main><footer class="text-center py-6 text-[10px] text-gray-600 border-t border-gray-900">© 2026 DoBlood.online</footer></body></html>
