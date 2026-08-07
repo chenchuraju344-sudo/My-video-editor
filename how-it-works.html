@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="en" class="dark"><head><!-- PLAYABLE_TOUCH_PATCH_V1 --><script>
+(function() {
+  if (window.__playableTouchPatchInstalled) return;
+  window.__playableTouchPatchInstalled = true;
+  var origAdd = EventTarget.prototype.addEventListener;
+  var blockedTypes = { touchstart: 1, touchmove: 1, wheel: 1 };
+  EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (blockedTypes[type]) {
+      if (options === undefined || options === null) {
+        options = { passive: true };
+      } else if (typeof options === 'boolean') {
+        options = { capture: options, passive: true };
+      } else {
+        options = Object.assign({}, options, { passive: true });
+      }
+    }
+    return origAdd.call(this, type, listener, options);
+  };
+})();
+</script><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>How It Works - DoBlood.online</title><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#030712;color:#f3f4f6;}</style></head><body class="min-h-screen flex flex-col"><header class="sticky top-0 z-50 bg-gray-950/80 backdrop-blur-xl border-b border-gray-800 p-4"><div class="container mx-auto flex justify-between items-center"><a href="index.html" class="text-xl font-black">DoBlood<span class="text-red-500">.online</span></a><a href="index.html" class="text-xs bg-gray-800 px-3 py-2 rounded-xl">Back</a></div></header><main class="container mx-auto max-w-3xl p-6 flex-1"><div class="bg-gray-900/60 border border-gray-800 p-8 rounded-3xl"><h1 class="text-2xl font-black uppercase mb-6">How DoBlood.online Works</h1><div class="grid gap-6"><div class="flex gap-4"><div class="bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-black text-xs shrink-0">1</div><div><h3 class="font-bold text-sm">Register as Donor</h3><p class="text-xs text-gray-400 mt-1">Click Become Donor, enter your Name, Blood Group, Pincode, Area and enable Live Location. Your profile becomes active across India instantly.</p></div></div><div class="flex gap-4"><div class="bg-emerald-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-black text-xs shrink-0">2</div><div><h3 class="font-bold text-sm">Find Donors in 5-20 KM Radius</h3><p class="text-xs text-gray-400 mt-1">Go to Find Donors, login with your donor account, select Blood Group, enter Area/Pincode and select Radius. Our system filters donors using GPS distance calculation and shows only nearby active donors.</p></div></div><div class="flex gap-4"><div class="bg-amber-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-black text-xs shrink-0">3</div><div><h3 class="font-bold text-sm">Emergency Alert Ticker</h3><p class="text-xs text-gray-400 mt-1">If you need blood urgently, click Send Alert, enter Patient Name, Blood Group, Hospital. Your alert will scroll live on homepage ticker for all users and a push notification is sent.</p></div></div><div class="flex gap-4"><div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-black text-xs shrink-0">4</div><div><h3 class="font-bold text-sm">Manage & Privacy</h3><p class="text-xs text-gray-400 mt-1">In Manage Profile, you can turn OFF your availability if you have donated recently, update location, or permanently delete your account.</p></div></div></div></div></main><footer class="text-center py-6 text-[10px] text-gray-600 border-t border-gray-900">© 2026 DoBlood.online</footer></body></html>
