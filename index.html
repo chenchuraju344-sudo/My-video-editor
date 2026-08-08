@@ -77,10 +77,18 @@
                     <button onclick="toggleNavMenu()" class="text-xs font-bold text-gray-200 bg-gray-900 hover:bg-gray-800 border border-gray-800 px-3.5 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-2 shadow-lg">
                         <i class="fa-solid fa-house text-red-500"></i> Menu <i class="fa-solid fa-chevron-down text-[10px] text-gray-400"></i>
                     </button>
-                    <div id="navMenuDropdown" class="hidden absolute right-0 mt-2 w-48 rounded-2xl glass-card border border-gray-800 shadow-2xl py-2 z-50">
+                    <div id="navMenuDropdown" class="hidden absolute right-0 mt-2 w-56 rounded-2xl glass-card border border-gray-800 shadow-2xl py-2 z-50">
                         <a href="javascript:void(0)" onclick="showPage('home'); toggleNavMenu();" class="block px-4 py-2.5 text-xs font-bold text-gray-300 hover:bg-gray-800/80 hover:text-white flex items-center gap-2"><i class="fa-solid fa-gauge-high text-red-500"></i> Dashboard</a>
                         <a href="javascript:void(0)" onclick="showPage('manage-profile-page'); toggleNavMenu();" class="block px-4 py-2.5 text-xs font-bold text-amber-400 hover:bg-gray-800/80 flex items-center gap-2"><i class="fa-solid fa-user-gear"></i> Manage Profile</a>
                         <a href="javascript:void(0)" onclick="showPage('aboutPage'); toggleNavMenu();" class="block px-4 py-2.5 text-xs font-bold text-blue-400 hover:bg-gray-800/80 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> About & Guidelines</a>
+                        
+                        <div class="border-t border-gray-800 my-1"></div>
+                        <a href="javascript:void(0)" onclick="showPage('howItWorksPage'); toggleNavMenu();" class="block px-4 py-2 text-xs font-semibold text-emerald-400 hover:bg-gray-800/80 flex items-center gap-2"><i class="fa-solid fa-gears"></i> How It Works</a>
+                        <a href="javascript:void(0)" onclick="showPage('privacyPolicyPage'); toggleNavMenu();" class="block px-4 py-2 text-xs font-semibold text-gray-300 hover:bg-gray-800/80 flex items-center gap-2"><i class="fa-solid fa-user-lock"></i> Privacy Policy</a>
+                        <a href="javascript:void(0)" onclick="showPage('termsPage'); toggleNavMenu();" class="block px-4 py-2 text-xs font-semibold text-gray-300 hover:bg-gray-800/80 flex items-center gap-2"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
+                        <a href="javascript:void(0)" onclick="showPage('contactUsPage'); toggleNavMenu();" class="block px-4 py-2 text-xs font-semibold text-gray-300 hover:bg-gray-800/80 flex items-center gap-2"><i class="fa-solid fa-headset"></i> Contact Us</a>
+                        <a href="javascript:void(0)" onclick="showPage('disclaimerPage'); toggleNavMenu();" class="block px-4 py-2 text-xs font-semibold text-gray-300 hover:bg-gray-800/80 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Disclaimer</a>
+                        <a href="javascript:void(0)" onclick="showPage('deleteAccountPage'); toggleNavMenu();" class="block px-4 py-2 text-xs font-semibold text-red-400 hover:bg-gray-800/80 flex items-center gap-2"><i class="fa-solid fa-user-xmark"></i> Delete Account</a>
                     </div>
                 </div>
             </div>
@@ -218,7 +226,6 @@
                     </div>
                 </section>
 
-                <!-- PROPER PROMISE.ALL FIXED DELETE ALERT SECTION -->
                 <section class="glass-card p-5 rounded-3xl border border-gray-800">
                     <h4 class="font-black text-xs text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-2">
                         <i class="fa-solid fa-circle-check text-emerald-400"></i> Found Blood? Delete Your Alert
@@ -691,16 +698,160 @@
                 </section>
             </main>
 
+            <!-- PAGE 8: PRIVACY POLICY PAGE -->
+            <main id="privacyPolicyPage" class="container mx-auto px-4 pt-6 pb-12 max-w-3xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-500 to-emerald-500"></div>
+                    <h2 class="text-xl md:text-2xl font-black uppercase tracking-wider text-3d-metallic mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-user-lock text-emerald-400"></i> Privacy Policy
+                    </h2>
+                    <div class="space-y-4 text-xs text-gray-300 leading-relaxed">
+                        <p>At <strong>DoBlood.online</strong>, safeguarding your privacy is our top priority. This policy outlines how user information is collected, encrypted, and utilized across our network.</p>
+                        <h4 class="font-bold text-gray-100 uppercase mt-3">1. Information Collection</h4>
+                        <p>We collect basic voluntary information including Name, Mobile Phone Number, Blood Group, Region/Pincode, Email, and optional Geo-Location metrics.</p>
+                        <h4 class="font-bold text-gray-100 uppercase mt-3">2. Zero-Spam Data Protection</h4>
+                        <p>Donor contact details are protected behind authentication barriers. Search operations require authorized donor credentials to prevent automated bots and spam marketing calls.</p>
+                        <h4 class="font-bold text-gray-100 uppercase mt-3">3. Data Usage</h4>
+                        <p>Your details are strictly used to assist critical medical requests. We never sell, monetize, or rent personal data to commercial third parties.</p>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 9: TERMS & CONDITIONS PAGE -->
+            <main id="termsPage" class="container mx-auto px-4 pt-6 pb-12 max-w-3xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
+                    <h2 class="text-xl md:text-2xl font-black uppercase tracking-wider text-3d-metallic mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-file-contract text-blue-400"></i> Terms & Conditions
+                    </h2>
+                    <div class="space-y-4 text-xs text-gray-300 leading-relaxed">
+                        <p>By accessing or using <strong>DoBlood.online</strong>, you agree to comply with the following mandatory operational terms:</p>
+                        <h4 class="font-bold text-gray-100 uppercase mt-3">1. Voluntary Non-Commercial Platform</h4>
+                        <p>Blood donation must be entirely voluntary and non-remunerated. Demanding or offering money for blood donations on this platform is strictly illegal.</p>
+                        <h4 class="font-bold text-gray-100 uppercase mt-3">2. User Verification & Responsibility</h4>
+                        <p>Users are solely responsible for ensuring the accuracy of submitted bio-metrics. Platform admins reserve the right to remove suspicious profiles instantly.</p>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 10: CONTACT US PAGE -->
+            <main id="contactUsPage" class="container mx-auto px-4 pt-6 pb-12 max-w-xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500"></div>
+                    <h2 class="text-xl md:text-2xl font-black uppercase tracking-wider text-3d-metallic mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-headset text-purple-400"></i> Contact Us
+                    </h2>
+                    <p class="text-xs text-gray-400 mb-5 leading-relaxed">Have questions or need technical support regarding the network platform? Reach out to our team.</p>
+                    <div class="space-y-4 text-xs">
+                        <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 flex items-center gap-3">
+                            <i class="fa-solid fa-envelope text-red-500 text-lg"></i>
+                            <div>
+                                <span class="text-gray-400 text-[10px] block font-bold uppercase">Official Network Email</span>
+                                <a href="mailto:support@doblood.online" class="text-gray-200 font-bold hover:underline">support@doblood.online</a>
+                            </div>
+                        </div>
+                        <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 flex items-center gap-3">
+                            <i class="fa-solid fa-globe text-cyan-400 text-lg"></i>
+                            <div>
+                                <span class="text-gray-400 text-[10px] block font-bold uppercase">Web Domain</span>
+                                <span class="text-gray-200 font-bold">https://doblood.online</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 11: DELETE ACCOUNT PAGE -->
+            <main id="deleteAccountPage" class="container mx-auto px-4 pt-6 pb-12 max-w-xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden border border-red-900/50">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-rose-700"></div>
+                    <h2 class="text-xl md:text-2xl font-black uppercase tracking-wider text-red-400 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-user-xmark"></i> Delete Account
+                    </h2>
+                    <p class="text-xs text-gray-400 mb-6 leading-relaxed">You can instantly permanently terminate your registered donor profile and wipe out stored data anytime.</p>
+                    <div class="bg-red-950/40 p-4 rounded-2xl border border-red-800/40 text-center">
+                        <p class="text-xs text-gray-300 font-medium mb-4">Click below to open Profile Management, authenticate with password, and execute profile deletion.</p>
+                        <button onclick="showPage('manage-profile-page')" class="bg-red-600 hover:bg-red-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow-lg shadow-red-950">
+                            Go To Manage Profile & Delete
+                        </button>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 12: DISCLAIMER PAGE -->
+            <main id="disclaimerPage" class="container mx-auto px-4 pt-6 pb-12 max-w-3xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 to-rose-500"></div>
+                    <h2 class="text-xl md:text-2xl font-black uppercase tracking-wider text-3d-metallic mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Disclaimer
+                    </h2>
+                    <div class="space-y-4 text-xs text-gray-300 leading-relaxed">
+                        <p><strong>DoBlood.online</strong> is an autonomous, peer-to-peer voluntary emergency blood locator grid. It acts solely as an informational bridge connecting donors with individuals in need.</p>
+                        <p>We do not store or process physical blood, nor do we run medical blood banks directly. Users are advised to perform standard medical verification and health screenings at recognized hospitals before blood donation.</p>
+                    </div>
+                </section>
+            </main>
+
+            <!-- PAGE 13: HOW IT WORKS PAGE -->
+            <main id="howItWorksPage" class="container mx-auto px-4 pt-6 pb-12 max-w-3xl hidden">
+                <button onclick="showPage('home')" class="mb-4 text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </button>
+                <section class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
+                    <h2 class="text-xl md:text-2xl font-black uppercase tracking-wider text-3d-metallic mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-gears text-emerald-400"></i> How It Works
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <div class="bg-gray-900/80 p-4 rounded-2xl border border-gray-800">
+                            <span class="text-emerald-400 font-black text-lg block mb-1">01. Register</span>
+                            <p class="text-gray-400 leading-relaxed">Donors sign up with location & blood group bio-metrics protected by a secret password.</p>
+                        </div>
+                        <div class="bg-gray-900/80 p-4 rounded-2xl border border-gray-800">
+                            <span class="text-emerald-400 font-black text-lg block mb-1">02. Search / Alert</span>
+                            <p class="text-gray-400 leading-relaxed">Authenticated users query local donors or dispatch emergency alerts live to the ticker.</p>
+                        </div>
+                        <div class="bg-gray-900/80 p-4 rounded-2xl border border-gray-800">
+                            <span class="text-emerald-400 font-black text-lg block mb-1">03. Save Lives</span>
+                            <p class="text-gray-400 leading-relaxed">Direct contact connects patients with nearby voluntary donors in real-time.</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
         </div>
     </div>
 
     <!-- HIDDEN CANVAS FOR WHATSAPP CARD EXPORT -->
     <canvas id="hiddenProfileCanvas" width="600" height="400" class="hidden"></canvas>
 
-    <!-- FOOTER -->
-    <footer class="bg-gray-950 text-gray-500 text-center py-6 text-xs border-t border-gray-900 mt-auto">
+    <!-- FOOTER - DOBLOOD POLICY LINKS -->
+    <footer class="bg-gray-950 text-gray-500 text-center py-8 text-xs border-t border-gray-900 mt-auto">
         <div class="container mx-auto px-4">
-            <p class="font-bold tracking-wider text-gray-400">© 2026 DoBlood.online | Autonomous Local Blood Line Network</p>
+            <div class="flex flex-wrap justify-center gap-2.5 md:gap-4 mb-5">
+                <a href="javascript:void(0)" onclick="showPage('privacyPolicyPage')" class="text-gray-300 hover:text-white bg-gray-900/80 hover:bg-gray-800 border border-gray-800 px-3.5 py-1.5 rounded-full transition-all">Privacy Policy</a>
+                <a href="javascript:void(0)" onclick="showPage('termsPage')" class="text-gray-300 hover:text-white bg-gray-900/80 hover:bg-gray-800 border border-gray-800 px-3.5 py-1.5 rounded-full transition-all">Terms & Conditions</a>
+                <a href="javascript:void(0)" onclick="showPage('contactUsPage')" class="text-gray-300 hover:text-white bg-gray-900/80 hover:bg-gray-800 border border-gray-800 px-3.5 py-1.5 rounded-full transition-all">Contact Us</a>
+                <a href="javascript:void(0)" onclick="showPage('deleteAccountPage')" class="text-rose-400 hover:text-rose-300 bg-red-950/40 hover:bg-red-950 border border-red-900/60 px-3.5 py-1.5 rounded-full transition-all">Delete Account</a>
+                <a href="javascript:void(0)" onclick="showPage('disclaimerPage')" class="text-gray-300 hover:text-white bg-gray-900/80 hover:bg-gray-800 border border-gray-800 px-3.5 py-1.5 rounded-full transition-all">Disclaimer</a>
+                <a href="javascript:void(0)" onclick="showPage('howItWorksPage')" class="text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 hover:bg-emerald-950 border border-emerald-900/60 px-3.5 py-1.5 rounded-full transition-all">How it Works</a>
+            </div>
+            <p class="font-bold tracking-wider text-gray-500">© 2026 DoBlood.online | Saving Lives Together</p>
         </div>
     </footer>
 
@@ -931,7 +1082,11 @@
 
         // PAGE NAVIGATION ROUTER
         window.showPage = function(pageId) {
-            const pages = ['findBloodPage', 'becomeDonorPage', 'manageProfilePage', 'aboutPage', 'helplinePage', 'emergencyAlertPage', 'donorMetricsPage', 'mainTablePage'];
+            const pages = [
+                'findBloodPage', 'becomeDonorPage', 'manageProfilePage', 'aboutPage', 'helplinePage', 
+                'emergencyAlertPage', 'donorMetricsPage', 'mainTablePage', 'privacyPolicyPage', 
+                'termsPage', 'contactUsPage', 'deleteAccountPage', 'disclaimerPage', 'howItWorksPage'
+            ];
             pages.forEach(p => {
                 const el = document.getElementById(p);
                 if(el) el.classList.add('hidden');
@@ -965,6 +1120,24 @@
             }
             else if(pageId === 'helplinePage') {
                 document.getElementById('helplinePage').classList.remove('hidden');
+            }
+            else if(pageId === 'privacyPolicyPage') {
+                document.getElementById('privacyPolicyPage').classList.remove('hidden');
+            }
+            else if(pageId === 'termsPage') {
+                document.getElementById('termsPage').classList.remove('hidden');
+            }
+            else if(pageId === 'contactUsPage') {
+                document.getElementById('contactUsPage').classList.remove('hidden');
+            }
+            else if(pageId === 'deleteAccountPage') {
+                document.getElementById('deleteAccountPage').classList.remove('hidden');
+            }
+            else if(pageId === 'disclaimerPage') {
+                document.getElementById('disclaimerPage').classList.remove('hidden');
+            }
+            else if(pageId === 'howItWorksPage') {
+                document.getElementById('howItWorksPage').classList.remove('hidden');
             }
             window.scrollTo({top: 0, behavior: 'smooth'});
         };
@@ -1181,7 +1354,7 @@
             }
         };
 
-        // 1. DEBOUNCE SEARCH TRIGGER (500ms)
+        // DEBOUNCE SEARCH TRIGGER (500ms)
         window.triggerDebouncedSearch = function() {
             clearTimeout(searchDebounceTimer);
             searchDebounceTimer = setTimeout(() => {
@@ -1189,7 +1362,7 @@
             }, 500);
         };
 
-        // 5. OPTIMIZED SEARCH WITH LIMIT(20) & PAGINATION
+        // OPTIMIZED SEARCH WITH LIMIT(20) & PAGINATION
         window.searchDonorsData = async function(isNextPage = false) {
             const blood_group = document.getElementById('searchBlood').value;
             const area_query = document.getElementById('searchArea').value.trim();
@@ -1329,7 +1502,7 @@
             }
         };
 
-        // 2. DASHBOARD STATS SUPER FIX: SERVER-SIDE COUNT QUERIES (1 READ EACH)
+        // DASHBOARD STATS: SERVER-SIDE COUNT QUERIES
         async function updateDashboardStatistics() {
             try {
                 const donorsColl = collection(db, "donors");
@@ -1388,7 +1561,7 @@
             }
         };
 
-        // 3. DELETE EMERGENCY ALERT BUG FIX (PROMISE.ALL)
+        // DELETE EMERGENCY ALERT
         window.deleteEmergencyAlert = async function() {
             const phone = document.getElementById('deleteAlertPhone').value.trim();
             if(!phone) {
@@ -1508,4 +1681,4 @@
         setTimeout(initApp, 300);
     </script>
 </body>
-                                </html>
+                    </html>
